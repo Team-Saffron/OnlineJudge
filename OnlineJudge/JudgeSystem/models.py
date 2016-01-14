@@ -30,7 +30,4 @@ class Solution(models.Model):
 	verdict = models.CharField(max_length = 1, choices = verdicts)
 
 	def __str__(self):
-		return self.id
-
-	def __init__(self, str):
-		self.code = str
+		return str(self.id)

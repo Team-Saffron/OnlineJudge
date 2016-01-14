@@ -23,3 +23,13 @@ def submitSolution(request,prob_id):
 	}
 	return render(request, 'submit_solution.html', context)
 
+def getResult(request,prob_id):
+	problem = Problem.objects.get(pk = prob_id)
+	str = request.POST["code_text"]
+	sol_obj = Solution(str)
+	context = {
+		'problem' : problem,
+		'sol_obj' : sol_obj
+	}
+	return render(request, 'get_result.html', context)
+

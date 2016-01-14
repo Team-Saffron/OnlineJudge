@@ -19,5 +19,6 @@ from . import views
 urlpatterns = [
     url(r'^index/', views.mainView, name = 'index'),
     url(r'^problem/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.probDetail, name = 'details'),
-    url(r'^submit/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.submitSolution, name = 'submit_code')
+    url(r'^submit/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.submitSolution, name = 'submit_code'),
+    url(r'^result/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.getResult, name = 'results')
 ]

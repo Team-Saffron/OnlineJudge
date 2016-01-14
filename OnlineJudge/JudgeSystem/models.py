@@ -31,3 +31,6 @@ class Solution(models.Model):
 
 	def __str__(self):
 		return self.id
+
+	def __init__(self, str):
+		self.code = str

@@ -1,0 +1,17 @@
+<html>
+<head>
+{{problem.name}}
+<body>
+<br>
+{{problem.statement}}
+<br>
+<button type="button" id = "myButton">Submit Solution</button>
+<script>
+    document.getElementById("myButton").onclick = function(){
+    	location.href = "/judge/submit/{{problem.id}}"
+    	//location.href = "/judge/index"
+    };
+</script>
+   </body>
+   </head>
+   </html>

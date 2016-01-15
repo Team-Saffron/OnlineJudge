@@ -1,4 +1,5 @@
 import datetime
+from .test import getVerdict
 
 from django.shortcuts import render
 from .models import Solution, Problem
@@ -28,7 +29,10 @@ def submitSolution(request, prob_id):
 def getResult(request, prob_id):
 	problem = Problem.objects.get(pk = prob_id)
 	str = request.POST["code_text"]
+
 	sol_obj = Solution(code = str, problem_id = problem, submission_time = datetime.datetime.now())
+	
+	sol_obj.verdict = getVerdict(sol_obj)
 	sol_obj.save()
 	context = {
 		'problem' : problem,

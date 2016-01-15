@@ -1,12 +1,13 @@
 <html>
 <head>
-<body>
-<ul>
-{% for p in problem %}
-   
-   <li><a href = "{% url 'details' p.id %}">{{p.name}}</a></li>
-   {% endfor %}
-   </ul>
+	<body>
+		<ul>
+		{% for p in problem %}	   
+		   <li>
+		   	<a href = "{% url 'details' p.id %}">{{p.name}}</a>
+		   </li>
+		{% endfor %}
+	    </ul>
    </body>
-   </head>
-   </html>
+</head>
+</html>

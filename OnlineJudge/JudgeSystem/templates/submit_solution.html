@@ -1,10 +1,17 @@
+<html>
+<head>
+	<body>
+		<h1>{{problem.statement}}</h1>
 
+		<form action = "{% url 'results' problem.id %}" method = "post">
 
-<h1>{{problem.statement}}</h1>
-
-<form action = "{% url 'results' problem.id %}" method = "post">
-{% csrf_token %}
-<textarea name = "code_text" rows = "100" cols = "100">
-your code goes here ......</textarea>
-<input type = "submit">
-</form> 
+			{% csrf_token %}
+			<textarea name = "code_text" rows = "100" cols = "100">
+				your code goes here ......
+			</textarea>
+			
+			<input type = "submit">
+		</form> 
+	</body>
+</head>
+</html>

@@ -60,20 +60,22 @@ def mainView(request):
 			return HttpResponseRedirect(reverse('login_page'))
 	else:
 		return HttpResponseRedirect(reverse('login_page'))
-'''
-def mainView(request):
-	problems = Problem.objects.all()
-	context = {
-		'problem' : problems
-	}
-	return render(request, 'index.html', context)
-'''
+
 def probDetail(request, prob_id):
-	problem = Problem.objects.get(pk = prob_id)
-	context = {
-		'problem' : problem
-	}
-	return render(request, 'prob_detail.html', context)
+      if request.user.is_authenticated():
+
+            user = request.user
+            if user.has_perm('JudgeSystem.change_solution'):
+            	problem = Problem.objects.get(pk = prob_id)
+            	context = {
+            		'problem' : problem
+            	}
+            	return render(request, 'prob_detail.html', context)
+            else:
+                  return HttpResponseRedirect(reverse('login_page'))
+      else:
+            return HttpResponseRedirect(reverse('login_page'))
+
 
 def submitSolution(request, prob_id):
 	problem = Problem.objects.get(pk = prob_id)

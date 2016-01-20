@@ -9,7 +9,7 @@
 		<ul>
 		{% for p in problem %}	   
 		   <li>
-		   	<a href = "{% url 'details' p.id %}">{{p.name}}</a>
+		   	<a href = "{% url 'details' p.id  %}">{{p.name}}</a>
 		   </li>
 		{% endfor %}
 	    </ul>

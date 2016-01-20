@@ -1,0 +1,44 @@
+<html>
+<head>
+	<body>
+		<h1>LOGIN</h1>
+
+		<form action = "{% url 'index' %}" method = "post">
+
+			{% csrf_token %}
+			Username : <br>
+			<input type = "text" name = "username">
+			<br>
+			Password : <br>
+			<input type = "text" name = "password">
+			<br>
+			<input type = "submit">
+
+		</form> 
+		<br><br>
+		
+		<strong> OR SIGN UP </strong>
+		<form action = "{% url 'sign_up' %}" method = "post">
+
+		    {% csrf_token %}
+		    First Name: <br>
+		    <input type = "text" name = "first_name">
+		    <br>
+		    Last Name: <br>
+		    <input type = "text" name = "last_name">
+		    <br>
+		    Email ID : <br>
+		    <input type = "text" name = "email_id">
+		    <br>
+		    Username: <br>
+		    <input type = "text" name = "username">
+		    <br>
+		    Password: <br>
+		    <input type = "text" name = "password">
+		    <br>
+		    <input type = "submit" value = "Sign Up !">
+
+		</form>
+	</body>
+</head>
+</html>

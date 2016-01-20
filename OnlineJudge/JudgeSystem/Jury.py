@@ -43,8 +43,23 @@ def run_code(objFile, input_file, output_file, timeout):
 
 
 #Code to evaluate Correctness of answer
-def checkWA():
-	print 'Check for WA'
+def checkWA(correct_file , test_file):
+	test_lines = open(test_file).readlines()
+	correct_lines = open(correct_file).readlines()
+	#Now remove trailing spaces
+	while(len(test_lines) > 0 and test_lines[-1] == "\n"):
+		test_lines.pop()
+	while(len(correct_lines) > 0 and correct_lines[-1] == "\n"):
+		correct_lines.pop()
+
+	if(len(test_lines) != len(correct_lines) ):
+		return ("Wrong Answer")
+	else:
+	    for test,correct in zip(test_lines,correct_lines):
+	    	if(test != correct):
+	    		return ("Wrong Answer")
+	    return ("Success")
+	
 
 
 #Code to give verdict to a solution object
@@ -61,12 +76,10 @@ def getVerdict(solObj):
 	
 
 	if compile_result == 'SuccessFully compiled':
-		
-		return run_code(objName, problem_input, objName + '.txt', 1)
+		output_file = objName + '.txt'
+		if ( run_code(objName, problem_input, output_file, 1) == "Success" ):
+			correct_output_file = str(solObj.problem_id) + '_output.txt'
+			return ( checkWA(correct_output_file,output_file) )
 	else:
 		return 'Compilation Error'
 	
-
-
-	
-

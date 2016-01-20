@@ -14,20 +14,21 @@ class Problem(models.Model):
 
 
 class Solution(models.Model):
-	verdicts = (
+	'''verdicts = (
 		('C', 'Compilation Error'),
 		('AC', 'Accepted'),
 		('WA', 'Wrong Answer'),
 		('RE', 'Runtime Error'),
 		('TLE', 'Time Limit Exceed')
 	)
+	'''
 
 
 	code = models.CharField(max_length = 1000)
 	problem_id = models.ForeignKey(Problem)
 	submission_time = models.DateTimeField()
 	id  = models.IntegerField(primary_key = True)
-	verdict = models.CharField(max_length = 1, choices = verdicts)
+	verdict = models.CharField(max_length = 100)
 
 	def __str__(self):
 		return str(self.id)

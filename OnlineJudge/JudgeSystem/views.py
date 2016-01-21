@@ -31,15 +31,15 @@ def signUp(request):
 			user = None
 	if user is not None:
 		context = {}
-		return render(request,'login_page.html',context)
+		return HttpResponseRedirect(reverse('login_page'))
 	else:
 		u = User.objects.create(username = username , email = email , first_name = first_name , last_name = last_name)
 		u.set_password(password)
+		permission = Permission.objects.get(codename = 'change_solution')
+		u.user_permissions.add(permission)
 		u.save()
 		context = {}
-		return render(request, 'login_page.html', context)
-
-
+		return HttpResponseRedirect(reverse('login_page'))
 
 
 def mainView(request):
@@ -60,6 +60,7 @@ def mainView(request):
 			return HttpResponseRedirect(reverse('login_page'))
 	else:
 		return HttpResponseRedirect(reverse('login_page'))
+
 
 def probDetail(request, prob_id):
       if request.user.is_authenticated():
@@ -83,6 +84,7 @@ def submitSolution(request, prob_id):
 		'problem' : problem
 	}
 	return render(request, 'submit_solution.html', context)
+
 
 def getResult(request, prob_id):
 	problem = Problem.objects.get(pk = prob_id)

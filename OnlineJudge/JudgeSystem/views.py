@@ -2,7 +2,7 @@ import datetime
 import Jury
 
 from django.shortcuts import render
-from .models import Solution, Problem
+from .models import Solution, Problem, JudgeUser
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ObjectDoesNotExist
@@ -33,7 +33,7 @@ def signUp(request):
 		context = {}
 		return HttpResponseRedirect(reverse('login_page'))
 	else:
-		u = User.objects.create(username = username , email = email , first_name = first_name , last_name = last_name)
+		u = JudgeUser.objects.create(username = username , email = email , first_name = first_name , last_name = last_name)
 		u.set_password(password)
 		permission = Permission.objects.get(codename = 'change_solution')
 		u.user_permissions.add(permission)
@@ -89,12 +89,35 @@ def submitSolution(request, prob_id):
 def getResult(request, prob_id):
 	problem = Problem.objects.get(pk = prob_id)
 	str = request.POST["code_text"]
+	solver = request.user
+	solver = JudgeUser.objects.get(username = solver.username)
 
-	sol_obj = Solution(code = str, problem_id = problem, submission_time = datetime.datetime.now())
+	try:
+		sol_obj = (solver.solution_list).get(problem_id = problem)
+	except:
+		sol_obj = None
+	if sol_obj is None:
+		bug="1"
+		sol_obj = Solution(code = str, problem_id = problem, submission_time = datetime.datetime.now())
+		sol_obj.save()
+		solver.solution_list.add(Solution.objects.last())
+	else:
+		bug="2"
+		sol_obj.code = str
+		sol_obj.submission_time = datetime.datetime.now()
+
 	sol_obj.verdict = Jury.getVerdict(sol_obj)
-	sol_obj.save()
+	
+	if sol_obj.verdict == "Success":
+		sol_obj.solved = 1
+	elif sol_obj.solved != 1:
+		sol_obj.penalty = sol_obj.penalty + 1
+	sol_obj.save(force_update = True)
+
 	context = {
 		'problem' : problem,
-		'sol_obj' : sol_obj
+		'sol_obj' : sol_obj,
+		'solver' : solver,
+		'bug' : bug
 	}
 	return render(request, 'get_result.html', context)

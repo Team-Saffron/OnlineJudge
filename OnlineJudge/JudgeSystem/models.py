@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class JudgeUser(User):
-	problem_list = models.ManyToManyField('Problem')
+	solution_list = models.ManyToManyField('Solution')
 	def __str__(self):
 		return str(self.username)
 	contrib_pts = models.IntegerField(default = 0)
@@ -33,7 +33,7 @@ class Solution(models.Model):
 
 	code = models.CharField(max_length = 1000)
 	problem = models.ForeignKey(Problem)
-	solver = models.ForeignKey(JudgeUser , null = True)
+	#solver = models.ForeignKey(JudgeUser , null = True)
 	penalty = models.IntegerField(default = 0)
 	solved = models.BooleanField(default = 0)
 	submission_time = models.DateTimeField()

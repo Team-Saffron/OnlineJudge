@@ -109,23 +109,28 @@ def getResult(request, prob_id):
 		sol_obj = (solver.solution_list).get(problem_id = problem)
 	except:
 		sol_obj = None
+
+
 	if sol_obj is None:
-		bug="1"
+		bug = "1"
 		sol_obj = Solution(code = str, problem_id = problem, submission_time = datetime.datetime.now())
-		sol_obj.save()
-		solver.solution_list.add(Solution.objects.last())
+		
 	else:
-		bug="2"
+		bug = "2"
+		print sol_obj.code
 		sol_obj.code = str
 		sol_obj.submission_time = datetime.datetime.now()
 
 	sol_obj.verdict = Jury.getVerdict(sol_obj)
+
 	
 	if sol_obj.verdict == "Success":
 		sol_obj.solved = 1
 	elif sol_obj.solved != 1:
 		sol_obj.penalty = sol_obj.penalty + 1
+
 	sol_obj.save()
+	solver.solution_list.add(Solution.objects.last())
 
 	context = {
 		'problem' : problem,
@@ -134,6 +139,7 @@ def getResult(request, prob_id):
 		'bug' : bug
 	}
 	return render(request, 'get_result.html', context)
+
 
 def addProblem(request):
 	U = request.user
@@ -169,3 +175,29 @@ def addProblem(request):
 		'user' : U
 	}
 	return render(request, 'add_problem.html', context)
+def allUsers(request):
+	context = {
+		"users" : JudgeUser.objects.all()
+	}
+	return render(request, 'userlist.html',context)
+
+
+def userProfile(request, username):
+	try:
+		U = JudgeUser.objects.get(username = username)
+	except ObjectDoesNotExist:
+		U = None
+	if U is None:
+		context = {
+
+		}
+		return render(request, 'pagenotfound.html', context)
+	addList = Problem.objects.filter(setter = U).all()
+
+	context = {
+		"user" : U,
+		"tryList" : U.solution_list.all(),
+		"addList" : addList
+	}
+
+	return render(request, 'userprofile.html', context)

@@ -77,9 +77,12 @@ def getVerdict(solObj):
 
 	if compile_result == 'SuccessFully compiled':
 		output_file = objName + '.txt'
-		if ( run_code(objName, problem_input, output_file, 1) == "Success" ):
+		IR = run_code(objName, problem_input, output_file, 1)
+		if ( IR == "Success" ):
 			correct_output_file = str(solObj.problem) + '_output.txt'
 			return ( checkWA(correct_output_file,output_file) )
+		else:
+			return IR
 	else:
 		return 'Compilation Error'
 

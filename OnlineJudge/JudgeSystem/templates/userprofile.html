@@ -1,0 +1,30 @@
+<html>
+<head>
+	<body>
+		<h1>{{user.username}}</h1>
+		<h2>{{user.first_name}} {{user.last_name}}</h2>
+		<h2>{{user.contrib_pts}}</h2>
+		<br>
+		<br>
+		<h2>Problems Solved</h2>
+		{%  for sol in tryList %}
+		{% if sol.solved == True %}
+		<a href = "{% url 'details' sol.problem.id %}">{{sol.problem.id}}</a>
+		<br>
+		{% endif %}
+		{% endfor %}
+		<h2>Todo List</h2>
+		{%  for sol in tryList %}
+		{% if sol.solved == False %}
+		<a href = "{% url 'details' sol.problem.id %}">{{sol.problem.id}}</a>
+		<br>
+		{% endif %}
+		{% endfor %}
+		<h2>Problems Added</h2>
+		{%  for prob in addList %}
+		<a href = "{% url 'details' prob.id %}">{{prob.id}}</a>
+		<br>
+		{% endfor %}
+	</body>
+</head>
+</html>

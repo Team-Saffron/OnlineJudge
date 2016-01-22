@@ -1,0 +1,11 @@
+<html>
+<head>
+</head>
+<body>
+	<h2>All user in Database are:<h2>
+		{% for user in users %}
+		<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
+		<br>
+		{% endfor %}
+</body>
+</html>

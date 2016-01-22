@@ -1,0 +1,12 @@
+<html>
+  <head>
+     <body>
+        {% if sol_obj == None %}
+            <strong> You have not submitted a solution yet.</strong>
+        {% else %}
+            {{sol_obj.code|linebreaksbr }}
+        {% endif %}
+        
+     </body>
+  </head>
+</html>

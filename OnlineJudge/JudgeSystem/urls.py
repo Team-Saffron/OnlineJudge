@@ -18,6 +18,7 @@ from . import views
 #app_name = 'JudgeSystem'
 urlpatterns = [
     url(r'^index/', views.mainView, name = 'index'),
+    url(r'^submissions/(?P<solution_id>([0-9])+)/', views.printSolution, name = 'print_solution'),
     url(r'^problem/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.probDetail, name = 'details'),
     url(r'^submit/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.submitSolution, name = 'submit_code'),
     url(r'^result/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.getResult, name = 'results'),

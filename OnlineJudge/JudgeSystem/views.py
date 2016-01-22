@@ -80,9 +80,18 @@ def probDetail(request, prob_id):
 
             user = request.user
             if user.has_perm('JudgeSystem.change_solution'):
+            	user = JudgeUser.objects.get(username = user.username)
             	problem = Problem.objects.get(pk = prob_id)
+            	try:
+            		sol_obj = (user.solution_list).get(problem = problem)
+            		sol_id = sol_obj.id
+            	except:
+            		sol_obj = None
+            		sol_id = 0
             	context = {
-            		'problem' : problem
+            		'problem' : problem,
+            		'user' : request.user,
+            		'sol_id' : sol_id
             	}
             	return render(request, 'prob_detail.html', context)
             else:
@@ -201,3 +210,15 @@ def userProfile(request, username):
 	}
 
 	return render(request, 'userprofile.html', context)
+
+
+def printSolution(request, solution_id):
+	try:
+		sol_obj = Solution.objects.get(id = solution_id)
+	except:
+		sol_obj = None
+	context = {
+	    "sol_obj" : sol_obj
+	}
+	return render(request, 'printsolution.html', context)
+	

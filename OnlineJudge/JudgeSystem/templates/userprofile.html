@@ -10,6 +10,7 @@
 		{%  for sol in tryList %}
 		{% if sol.solved == True %}
 		<a href = "{% url 'details' sol.problem.id %}">{{sol.problem.id}}</a>
+		<a href = "{% url 'print_solution' sol.id %}">  (solution)  </a>
 		<br>
 		{% endif %}
 		{% endfor %}
@@ -17,6 +18,7 @@
 		{%  for sol in tryList %}
 		{% if sol.solved == False %}
 		<a href = "{% url 'details' sol.problem.id %}">{{sol.problem.id}}</a>
+		<a href = "{% url 'print_solution' sol.id %}">  (solution)  </a>
 		<br>
 		{% endif %}
 		{% endfor %}

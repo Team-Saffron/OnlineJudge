@@ -5,6 +5,12 @@
 		<br>
 		{{problem.statement}}
 		<br>
+		<br>
+		{% if user.is_authenticated %}
+		    <a href = "{% url 'print_solution' sol_id %}"> My Submission </a>
+		    <br>
+		    <br>
+		{% endif %}
 		<button type="button" id = "myButton">Submit Solution</button>
 		<script>
 		    document.getElementById("myButton").onclick = function(){

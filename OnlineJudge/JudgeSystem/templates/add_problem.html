@@ -1,0 +1,32 @@
+<html>
+<head>
+	<body>
+		Hey! {{user.first_name}}
+		You can add Problem here
+		<form action = "{% url 'add_problem' %}" method = "post">
+			{% csrf_token %}
+
+			Problem ID : 
+			<input type = "text" name = "prob_id">
+			<br>
+			Problem Name : 
+			<input type = "text" name = "prob_name">
+			<br>
+			Statement : <br>
+			<textarea name = "statement" rows = 20 cols = 20>ADD statement</textarea>
+			<br>
+			Add Reference Input:
+			<br>
+			<textarea name = "input" rows = 20 cols = 20>ADD input</textarea>
+			<br>
+			Add Expected Output:
+			<br>
+			<textarea name = "output" rows = 20 cols = 20>ADD output</textarea>
+			<br>
+			<input type = "submit">
+
+		</form>
+
+	</body>
+</head>
+</html>

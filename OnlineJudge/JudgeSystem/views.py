@@ -43,13 +43,27 @@ def signUp(request):
 
 
 def mainView(request):
-	username = request.POST['username']
-	password = request.POST['password']
-	context = {}
-	user = authenticate(username = username, password = password)
-	if user is not None:
-		if user.is_active:
-			login(request, user)
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		context = {}
+		user = authenticate(username = username, password = password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				problems = Problem.objects.all()
+				context = {
+				    'problem' : problems,
+				    'user' : user
+				}
+				return render(request,'index.html',context)
+			else:
+				return HttpResponseRedirect(reverse('login_page'))
+		else:
+			return HttpResponseRedirect(reverse('login_page'))
+	else:
+		user = request.user
+		if user.is_authenticated():
 			problems = Problem.objects.all()
 			context = {
 			    'problem' : problems,
@@ -58,8 +72,7 @@ def mainView(request):
 			return render(request,'index.html',context)
 		else:
 			return HttpResponseRedirect(reverse('login_page'))
-	else:
-		return HttpResponseRedirect(reverse('login_page'))
+
 
 
 def probDetail(request, prob_id):
@@ -112,7 +125,7 @@ def getResult(request, prob_id):
 		sol_obj.solved = 1
 	elif sol_obj.solved != 1:
 		sol_obj.penalty = sol_obj.penalty + 1
-	sol_obj.save(force_update = True)
+	sol_obj.save()
 
 	context = {
 		'problem' : problem,
@@ -121,3 +134,38 @@ def getResult(request, prob_id):
 		'bug' : bug
 	}
 	return render(request, 'get_result.html', context)
+
+def addProblem(request):
+	U = request.user
+	try:
+		U = JudgeUser.objects.get(username = U.username)
+	except:
+		U = None
+
+	if U is None:
+		return HttpResponseRedirect(reverse('login_page'))
+
+
+	if request.method == 'POST':
+		if U.is_authenticated():
+			prob_id = request.POST["prob_id"]
+			prob_name = request.POST["prob_name"]
+			statement = request.POST["statement"]
+			input_data = request.POST["input"]
+			output_data = request.POST["output"]
+
+			#Created New Problem
+
+			newProblem = Problem(name = prob_name, id = prob_id, statement = statement, setter = U)
+			newProblem.save()
+
+			#Save Correct input and output
+			Jury.createIO(newProblem, input_data, output_data) 
+		else:
+			return HttpResponseRedirect(reverse('login_page'))	
+
+
+	context = {
+		'user' : U
+	}
+	return render(request, 'add_problem.html', context)

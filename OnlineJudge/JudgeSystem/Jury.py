@@ -68,7 +68,7 @@ def getVerdict(solObj):
 	file_name =  'solution_code.cpp'
 	objName = 'Sol'
 	codeFile = open(file_name, 'w')
-	problem_input = str(solObj.problem_id) + '_input.txt'
+	problem_input = str(solObj.problem) + '_input.txt'
 	codeFile.write(solObj.code)
 	codeFile.close()
 	
@@ -78,8 +78,20 @@ def getVerdict(solObj):
 	if compile_result == 'SuccessFully compiled':
 		output_file = objName + '.txt'
 		if ( run_code(objName, problem_input, output_file, 1) == "Success" ):
-			correct_output_file = str(solObj.problem_id) + '_output.txt'
+			correct_output_file = str(solObj.problem) + '_output.txt'
 			return ( checkWA(correct_output_file,output_file) )
 	else:
 		return 'Compilation Error'
+
+def createIO(probObj, input, output):
+	inFile = str(probObj.id) + '_input.txt'
+	outFile = str(probObj.id) + '_output.txt'
+
+	inFile = open(inFile, 'w')
+	inFile.write(input)
+	inFile.close()
+
+	outFile = open(outFile, 'w')
+	outFile.write(output)
+	outFile.close()
 	

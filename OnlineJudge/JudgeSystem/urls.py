@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^submit/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.submitSolution, name = 'submit_code'),
     url(r'^result/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.getResult, name = 'results'),
     url(r'^login/', views.loginPage, name = 'login_page'),
-    url(r'^signUp/', views.signUp, name = 'sign_up')
+    url(r'^signUp/', views.signUp, name = 'sign_up'),
+    url(r'^addProblem/', views.addProblem, name = 'add_problem')
 ]

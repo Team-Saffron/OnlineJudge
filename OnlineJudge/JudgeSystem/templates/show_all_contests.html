@@ -1,0 +1,18 @@
+<html>
+<head>
+	  <title>All Contests</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<h1> All Contests in DataBase </h1>
+	{% for contest in contests %}
+	<li>
+		<a href = "{% url 'ContestDetails' contest.contest_id %}">{{contest.contest_id}}</a>
+	</li>
+	{% endfor %}
+	</body>
+	</html>

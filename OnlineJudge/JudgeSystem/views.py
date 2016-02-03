@@ -8,6 +8,8 @@ from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import timezone
+
 # Create your views here.
 
 def loginPage(request):
@@ -68,7 +70,7 @@ def mainView(request):
 			problems = Problem.objects.all()
 			context = {
 			    'problem' : problems,
-			    'user' : user
+			    'user' : user,
 			}
 			return render(request,'index.html',context)
 		else:
@@ -76,12 +78,14 @@ def mainView(request):
 
 
 
-def probDetail(request, prob_id):
-      if request.user.is_authenticated():
+def probDetail(request, prob_id, contest_id):
+	print prob_id
+	if request.user.is_authenticated():
             user = request.user
             if user.has_perm('JudgeSystem.change_solution'):
             	user = JudgeUser.objects.get(username = user.username)
-            	problem = Problem.objects.get(pk = prob_id)
+            	contest = Contest.objects.get(pk = contest_id)
+            	problem = Problem.objects.filter(p_id = prob_id).get(contest = contest)
             	try:
             		sol_obj = (user.solution_list).get(problem = problem)
             		sol_id = sol_obj.id
@@ -95,21 +99,26 @@ def probDetail(request, prob_id):
             	}
             	return render(request, 'prob_detail.html', context)
             else:
-                  return HttpResponseRedirect(reverse('login_page'))
-      else:
+                return HttpResponseRedirect(reverse('login_page'))
+	else:
             return HttpResponseRedirect(reverse('login_page'))
-def contestProbDetail(request, prob_id, contest_id):
-	context = {
-
-	}
-	return render(request, 'pagenotfound.html', context)
 def practiceProbDetail(request, prob_id):
-	print "hello"
-	return HttpResponseRedirect(reverse('problem_detail', args = ['Practice', prob_id]))
-
+	return HttpResponseRedirect(reverse('details', args = ['Practice', prob_id]))
 
 def submitSolution(request, prob_id):
 	problem = Problem.objects.get(pk = prob_id)
+	cur_time = timezone.now()
+	if problem.contest.start_time > cur_time:
+		context = {
+			"message" : 'Contest Hasn\'t Started Yet'
+		}
+		return render(request, 'show_message.html', context)
+	elif problem.contest.end_time < cur_time:
+		context = {
+			"message" : 'Sorry! Contest has ended'
+		}
+		return render(request, 'show_message.html', context)
+
 	context = {
 		'problem' : problem
 	}
@@ -235,7 +244,6 @@ def printSolution(request, solution_id):
 	return render(request, 'printsolution.html', context)
 
 def showContest(request, contest_id):
-	print "BYG"
 	context = {
 
 	}
@@ -245,12 +253,28 @@ def showContest(request, contest_id):
 		contest = None
 	if contest == None:
 		return render(request, 'pagenotfound.html', context)
+	cur_time = timezone.now()
 	context = {
+		"message" : 'Contest Hasn\'t Started Yet'
+	}
+	if cur_time < contest.start_time:
+		return render(request, 'show_message.html', context)
+ 	context = {
 		"contest" : contest,
 		"user_list" : contest.user_list.all(),
-		"problem_list" : Problem.objects.filter(contest = contest)
+		"problem_list" : Problem.objects.filter(contest = contest),
+		"cur_time" : datetime.datetime.now(),
+		"tot_time" : cur_time - contest.end_time,
 	}
 	return render(request, 'contest_details.html', context)
+
+def showAllContests(request):
+	
+	context = {
+		"contests" : Contest.objects.all(),
+	}
+	return render(request, 'show_all_contests.html', context)
+
 
 
 	

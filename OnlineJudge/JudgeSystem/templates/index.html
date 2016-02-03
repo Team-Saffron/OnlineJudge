@@ -15,12 +15,14 @@
 	    <br>
 	    <a href = "{% url 'userlist' %}"> All Users </a>
 	    <br>
+	    <a href = "{% url 'AllContests' %}"> All Contests </a>
+	    <br>
 	    <strong> Problem Set </strong>
 	    <br>
 		<ul>
-		{% for p in problem %}	   
+		{% for p in problem %}  
 		   <li>
-		   	<a href = "{% url 'details' p.id  %}">{{p.name}}</a>
+		   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
 		   </li>
 		{% endfor %}
 	    </ul>

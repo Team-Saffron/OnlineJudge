@@ -9,7 +9,7 @@
 		<h2>Problems Solved</h2>
 		{%  for sol in tryList %}
 		{% if sol.solved == True %}
-		<a href = "{% url 'details' sol.problem.id %}">{{sol.problem.id}}</a>
+		<a href = "{% url 'details' 'Practice' sol.problem.p_id %}">{{sol.problem.p_id}}</a>
 		<a href = "{% url 'print_solution' sol.id %}">  (solution)  </a>
 		<br>
 		{% endif %}
@@ -17,14 +17,14 @@
 		<h2>Todo List</h2>
 		{%  for sol in tryList %}
 		{% if sol.solved == False %}
-		<a href = "{% url 'details' sol.problem.id %}">{{sol.problem.id}}</a>
+		<a href = "{% url 'details' 'Practice' sol.problem.p_id %}">{{sol.problem.p_id}}</a>
 		<a href = "{% url 'print_solution' sol.id %}">  (solution)  </a>
 		<br>
 		{% endif %}
 		{% endfor %}
 		<h2>Problems Added</h2>
 		{%  for prob in addList %}
-		<a href = "{% url 'details' prob.id %}">{{prob.id}}</a>
+		<a href = "{% url 'details' 'Practice' prob.p_id %}">{{prob.p_id}}</a>
 		<br>
 		{% endfor %}
 	</body>

@@ -9,16 +9,24 @@
 </head>
 <body>
 <h2> Problem List: </h2>
-{% for problem in problem_list%}
-{{problem}}
-<br>
+{% for p in problem_list%}
+ <li>
+   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
+</li>
 {% endfor %}
-<br>
-<br>
 <h2> Registered Users </h2>
 {% for user in user_list%}
-{{user.username}}
+ <li>
+   	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
+</li>
 <br>
+<h4>Start Time : {{ contest.start_time }}
+	<br>
+	End Time : {{ contest.end_time }}
+	<br>
+	Current Time : {{ cur_time }}
+	Total Time : {{ tot_time }}
+</h4>
 {% endfor %}
 <br>
 </body>

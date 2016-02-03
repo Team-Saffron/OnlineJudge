@@ -68,7 +68,7 @@ def getVerdict(solObj):
 	file_name =  'solution_code.cpp'
 	objName = 'Sol'
 	codeFile = open(file_name, 'w')
-	problem_input = str(solObj.problem) + '_input.txt'
+	problem_input = str(solObj.problem.p_id) + '_input.txt'
 	codeFile.write(solObj.code)
 	codeFile.close()
 	

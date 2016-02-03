@@ -2,7 +2,7 @@ import datetime
 import Jury
 
 from django.shortcuts import render
-from .models import Solution, Problem, JudgeUser
+from .models import Solution, Problem, JudgeUser, Contest
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,6 +25,7 @@ def signUp(request):
 	except ObjectDoesNotExist:
 		user = None
 	if user is None:
+		
 		try:
 			user = User.objects.get(email = email)
 		except ObjectDoesNotExist:
@@ -77,7 +78,6 @@ def mainView(request):
 
 def probDetail(request, prob_id):
       if request.user.is_authenticated():
-
             user = request.user
             if user.has_perm('JudgeSystem.change_solution'):
             	user = JudgeUser.objects.get(username = user.username)
@@ -98,6 +98,14 @@ def probDetail(request, prob_id):
                   return HttpResponseRedirect(reverse('login_page'))
       else:
             return HttpResponseRedirect(reverse('login_page'))
+def contestProbDetail(request, prob_id, contest_id):
+	context = {
+
+	}
+	return render(request, 'pagenotfound.html', context)
+def practiceProbDetail(request, prob_id):
+	print "hello"
+	return HttpResponseRedirect(reverse('problem_detail', args = ['Practice', prob_id]))
 
 
 def submitSolution(request, prob_id):
@@ -109,25 +117,27 @@ def submitSolution(request, prob_id):
 
 
 def getResult(request, prob_id):
+	print prob_id
 	problem = Problem.objects.get(pk = prob_id)
-	str = request.POST["code_text"]
+	print problem.p_id 
+	Str = request.POST["code_text"]
 	solver = request.user
 	solver = JudgeUser.objects.get(username = solver.username)
 
 	try:
-		sol_obj = (solver.solution_list).get(problem_id = problem)
+		sol_obj = (solver.solution_list).get(problem = problem)
 	except:
 		sol_obj = None
 
 
 	if sol_obj is None:
 		bug = "1"
-		sol_obj = Solution(code = str, problem_id = problem, submission_time = datetime.datetime.now())
+		sol_obj = Solution(code = Str, problem = problem, submission_time = datetime.datetime.now())
 		
 	else:
 		bug = "2"
 		print sol_obj.code
-		sol_obj.code = str
+		sol_obj.code = Str
 		sol_obj.submission_time = datetime.datetime.now()
 
 	sol_obj.verdict = Jury.getVerdict(sol_obj)
@@ -169,9 +179,11 @@ def addProblem(request):
 			input_data = request.POST["input"]
 			output_data = request.POST["output"]
 
+			practice = Contest.objects.get(pk = 'Practice')
+
 			#Created New Problem
 
-			newProblem = Problem(name = prob_name, id = prob_id, statement = statement, setter = U)
+			newProblem = Problem(name = prob_name, p_id = prob_id, statement = statement, setter = U, contest = practice)
 			newProblem.save()
 
 			#Save Correct input and output
@@ -221,4 +233,24 @@ def printSolution(request, solution_id):
 	    "sol_obj" : sol_obj
 	}
 	return render(request, 'printsolution.html', context)
+
+def showContest(request, contest_id):
+	print "BYG"
+	context = {
+
+	}
+	try:
+		contest = Contest.objects.get(pk = contest_id)
+	except:
+		contest = None
+	if contest == None:
+		return render(request, 'pagenotfound.html', context)
+	context = {
+		"contest" : contest,
+		"user_list" : contest.user_list.all(),
+		"problem_list" : Problem.objects.filter(contest = contest)
+	}
+	return render(request, 'contest_details.html', context)
+
+
 	

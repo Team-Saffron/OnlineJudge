@@ -8,6 +8,21 @@
 	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+{% if is_admin == True %}
+<h3> Hello! Admin
+<br>
+You can add problems for this contest here:
+<a href = "{% url 'add_problem' contest.contest_id %}">Add Problem</a>
+{% endif %}
+</h3>
+<h2> 
+<h3>Register:</h3>
+<button type="button" id = "myButton">Register</button>
+		<script>
+		    document.getElementById("myButton").onclick = function(){
+		    	location.href = "/judge/contests/{{contest.contest_id}}/register"
+		    };
+		</script>
 <h2> Problem List: </h2>
 {% for p in problem_list%}
  <li>
@@ -19,6 +34,7 @@
  <li>
    	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
 </li>
+{% endfor %}
 <br>
 <h4>Start Time : {{ contest.start_time }}
 	<br>
@@ -27,7 +43,7 @@
 	Current Time : {{ cur_time }}
 	Total Time : {{ tot_time }}
 </h4>
-{% endfor %}
+
 <br>
 </body>
 </html>

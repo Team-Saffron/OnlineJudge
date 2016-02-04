@@ -25,11 +25,11 @@ urlpatterns = [
     url(r'^result/(?P<prob_id>([0-9]|[a-z]|[A-Z])+)/', views.getResult, name = 'results'),
     url(r'^login/', views.loginPage, name = 'login_page'),
     url(r'^signUp/', views.signUp, name = 'sign_up'),
-    url(r'^addProblem/', views.addProblem, name = 'add_problem'),
+    url(r'^(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/addProblem/', views.addProblem, name = 'add_problem'),
     url(r'^users/all/', views.allUsers, name = 'userlist'),
     url(r'^users/(?P<username>([0-9]|[a-z]|[A-Z])+)/', views.userProfile, name = 'user_profile'),
     url(r'^contests/all/', views.showAllContests, name = 'AllContests'),
-    url(r'^contests/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/', views.showContest, name = 'ContestDetails'),
-
+    url(r'^contests/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/details/', views.showContest, name = 'ContestDetails'),
+    url(r'^contests/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/register/', views.registerForContest, name = 'register_for_contest'),
 
 ]

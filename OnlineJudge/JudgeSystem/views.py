@@ -41,6 +41,8 @@ def signUp(request):
 		permission = Permission.objects.get(codename = 'change_solution')
 		u.user_permissions.add(permission)
 		u.save()
+		contest = Contest.objects.get(contest_id = 'Practice')
+		contest.user_list.add(u)
 		context = {}
 		return HttpResponseRedirect(reverse('login_page'))
 
@@ -107,7 +109,11 @@ def practiceProbDetail(request, prob_id):
 
 def submitSolution(request, prob_id):
 	problem = Problem.objects.get(pk = prob_id)
+	current_user = JudgeUser.objects.get(username = request.user.username)
 	cur_time = timezone.now()
+	#Checking if user is registered or not
+	registered = problem.contest.user_list.filter(username = current_user.username).count()
+
 	if problem.contest.start_time > cur_time:
 		context = {
 			"message" : 'Contest Hasn\'t Started Yet'
@@ -118,10 +124,17 @@ def submitSolution(request, prob_id):
 			"message" : 'Sorry! Contest has ended'
 		}
 		return render(request, 'show_message.html', context)
+	elif registered == 0:
+		context = {
+			"message" : 'Please Register First'
+		}
+		return render(request, 'show_message.html', context)
 
 	context = {
 		'problem' : problem
 	}
+
+
 	return render(request, 'submit_solution.html', context)
 
 
@@ -169,7 +182,7 @@ def getResult(request, prob_id):
 	return render(request, 'get_result.html', context)
 
 
-def addProblem(request):
+def addProblem(request, contest_id):
 	U = request.user
 	try:
 		U = JudgeUser.objects.get(username = U.username)
@@ -187,12 +200,13 @@ def addProblem(request):
 			statement = request.POST["statement"]
 			input_data = request.POST["input"]
 			output_data = request.POST["output"]
+			contest_name = request.POST["contest_name"]
 
-			practice = Contest.objects.get(pk = 'Practice')
+			contest = Contest.objects.get(pk = contest_name)
 
 			#Created New Problem
 
-			newProblem = Problem(name = prob_name, p_id = prob_id, statement = statement, setter = U, contest = practice)
+			newProblem = Problem(name = prob_name, p_id = prob_id, statement = statement, setter = U, contest = contest)
 			newProblem.save()
 
 			#Save Correct input and output
@@ -202,9 +216,12 @@ def addProblem(request):
 
 
 	context = {
-		'user' : U
+		'user' : U,
+		'contest_name' : contest_id
 	}
 	return render(request, 'add_problem.html', context)
+
+
 def allUsers(request):
 	context = {
 		"users" : JudgeUser.objects.all()
@@ -243,6 +260,7 @@ def printSolution(request, solution_id):
 	}
 	return render(request, 'printsolution.html', context)
 
+
 def showContest(request, contest_id):
 	context = {
 
@@ -257,14 +275,24 @@ def showContest(request, contest_id):
 	context = {
 		"message" : 'Contest Hasn\'t Started Yet'
 	}
+
 	if cur_time < contest.start_time:
 		return render(request, 'show_message.html', context)
+	current_user = JudgeUser.objects.get(username = request.user.username)
+	
+
+	if current_user == contest.administrator:
+		isAdmin = True
+	else:
+		isAdmin = False
+
  	context = {
 		"contest" : contest,
 		"user_list" : contest.user_list.all(),
 		"problem_list" : Problem.objects.filter(contest = contest),
 		"cur_time" : datetime.datetime.now(),
 		"tot_time" : cur_time - contest.end_time,
+		"is_admin" : isAdmin,
 	}
 	return render(request, 'contest_details.html', context)
 
@@ -275,6 +303,11 @@ def showAllContests(request):
 	}
 	return render(request, 'show_all_contests.html', context)
 
-
+def registerForContest(request, contest_id):
+	print "Hell!!"
+	current_user = JudgeUser.objects.get(username = request.user.username)
+	contest = Contest.objects.get(contest_id = contest_id)
+	contest.user_list.add(current_user)
+	return HttpResponseRedirect(reverse('ContestDetails', args = [contest_id,]))
 
 	

@@ -1,6 +1,6 @@
 import datetime
 import Jury
-
+import dateutil.parser; 
 from django.shortcuts import render
 from .models import Solution, Problem, JudgeUser, Contest
 from django.contrib.auth import authenticate, login
@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
+
 
 # Create your views here.
 
@@ -214,7 +215,6 @@ def addProblem(request, contest_id):
 		else:
 			return HttpResponseRedirect(reverse('login_page'))	
 
-
 	context = {
 		'user' : U,
 		'contest_name' : contest_id
@@ -310,4 +310,64 @@ def registerForContest(request, contest_id):
 	contest.user_list.add(current_user)
 	return HttpResponseRedirect(reverse('ContestDetails', args = [contest_id,]))
 
+def createContest(request):
+	u = request.user
+	try:
+		u = JudgeUser.objects.get(username = u.username)
+	except:
+		u = None
+	if u is None:
+		return HttpResponseRedirect(reverse('login_page'))
+	if u.is_authenticated():
+		if request.method =='POST':
+			contest_id = request.POST["contest_id"]
+			try:
+				contest = Contest.objects.get(pk = contest_id)
+			except:
+				contest = None
+			if contest is not None:
+				error = 0
+				context={
+					"error":error
+				}
+				return render(request,'creation_result.html',context)
+			contest = Contest(contest_id = contest_id, isActive = False)
+
+
+			start_time = request.POST["start_time"]
+			contest.start_time = dateutil.parser.parse(start_time)
+			end_time = request.POST["end_time"]
+			contest.end_time = dateutil.parser.parse(end_time)
+			admin = u
+			contest.administrator = u
+			#contest = Contest(contest_id = contest_id, start_time = start_time, end_time = end_time, administrator = admin)
+			contest.save()
+			error = 1
+			context={ "error" : error}
+			return render(request,'creation_result.html',context)
+		else:
+			context={
+				"user" : u,
+			}
+			return render(request,'create_contest.html',context)
+	else:
+		return HttpResponseRedirect(reverse('login_page'))
+
+
+def extendContest(request, contest_id):
+	if request.method == 'POST':
+		contest = Contest.objects.get(pk = contest_id)
+		contest.end_time = dateutil.parser.parse(request.POST["new_end_time"])
+		contest.save()
+		return HttpResponseRedirect(reverse('ContestDetails', args = [contest_id,]))
+	else:
+		context={
+			"contest_id":contest_id
+		}
+		return render(request, 'extend_contest.html', context)
+
+
+
+
+	
 	

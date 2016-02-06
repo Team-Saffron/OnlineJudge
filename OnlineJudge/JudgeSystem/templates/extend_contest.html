@@ -1,0 +1,10 @@
+<HTML>
+	<BODY>
+		<form action = "{% url 'extend_contest' contest_id %}" method = "post">
+			{% csrf_token %}
+			Enter new end time : 
+			<input type = "text" name = "new_end_time" >
+			<br>
+			<input type = "submit">
+
+		</form>

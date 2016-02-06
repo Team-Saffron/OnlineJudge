@@ -1,0 +1,35 @@
+<html>
+<head>
+	  <title>Create Contest</title>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<body>
+		Hey! {{user.first_name}}
+		You can add Contest here
+		<form action = "{% url 'create_contest' %}" method = "post">
+			{% csrf_token %}
+			Contest Id
+			<br>
+			<input type="text" name = "contest_id">
+			<br>
+			<br>
+			Start Time: (Eg : Aug 28 1999 12:00AM)
+			<br>
+			<input type="text" name = "start_time">
+			<br>
+			<br>
+			End Time:
+			<br>
+			<input type="text" name = "end_time">
+			<br>
+			<br>
+			<input type = "submit">
+
+		</form>
+
+	</body>
+</head>
+</html>

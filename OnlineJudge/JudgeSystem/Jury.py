@@ -47,7 +47,7 @@ def checkWA(correct_file , test_file):
 	test_lines = open(test_file).readlines()
 	correct_lines = open(correct_file).readlines()
 	#Now remove trailing spaces
-	while(len(test_lines) > 0 and test_lines[-1] == "\n"):
+	while(len(test_lines) > 0 and test_lines[-1]== "\n"):
 		test_lines.pop()
 	while(len(correct_lines) > 0 and correct_lines[-1] == "\n"):
 		correct_lines.pop()
@@ -68,10 +68,9 @@ def getVerdict(solObj):
 	file_name =  'solution_code.cpp'
 	objName = 'Sol'
 	codeFile = open(file_name, 'w')
-	problem_input = str(solObj.problem.p_id) + '_input.txt'
+	problem_input = str(solObj.problem.id) + '_input.txt'
 	codeFile.write(solObj.code)
 	codeFile.close()
-	
 	compile_result = compile_code(file_name, 'cpp', objName)
 	
 
@@ -79,7 +78,7 @@ def getVerdict(solObj):
 		output_file = objName + '.txt'
 		IR = run_code(objName, problem_input, output_file, 1)
 		if ( IR == "Success" ):
-			correct_output_file = str(solObj.problem) + '_output.txt'
+			correct_output_file = str(solObj.problem.id) + '_output.txt'
 			return ( checkWA(correct_output_file,output_file) )
 		else:
 			return IR

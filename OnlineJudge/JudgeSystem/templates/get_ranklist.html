@@ -1,0 +1,23 @@
+<HTML>
+	<HEAD>
+		Ranklist for {{contest.contest_id}} :
+	</HEAD>
+	<BODY>
+		<BR>
+		<br>
+		<table style = "width:100%">
+			<tr>
+				<th> Username </th>
+				<th> Problems Solved </th>
+				<th> Penalties </th>
+			</tr>
+			{% for user in rankList %}
+				<tr>
+					<td align = "center"> {{user.username}} </td>
+					<td align = "center"> {{user.solved_prob }} </td>
+					<td align = "center"> {{user.penalty}} </td>
+				</tr>
+			{% endfor %}
+		</table>
+	</BODY>
+</HTML>				

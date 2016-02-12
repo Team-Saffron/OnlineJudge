@@ -46,16 +46,18 @@ def run_code(objFile, input_file, output_file, timeout):
 def checkWA(correct_file , test_file):
 	test_lines = open(test_file).readlines()
 	correct_lines = open(correct_file).readlines()
-	#Now remove trailing spaces
 	while(len(test_lines) > 0 and test_lines[-1]== "\n"):
 		test_lines.pop()
 	while(len(correct_lines) > 0 and correct_lines[-1] == "\n"):
 		correct_lines.pop()
-
 	if(len(test_lines) != len(correct_lines) ):
 		return ("Wrong Answer")
 	else:
 	    for test,correct in zip(test_lines,correct_lines):
+	    	while(test[-1] == '\n' or test[-1] == '\r' or test[-1] == ' '):
+	    		test = test[:-1]
+	    	while(correct[-1] == '\n' or correct[-1] == '\r' or correct[-1] == ' '):
+	    		correct = correct[:-1]
 	    	if(test != correct):
 	    		return ("Wrong Answer")
 	    return ("Success")

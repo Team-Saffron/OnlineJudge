@@ -367,6 +367,47 @@ def extendContest(request, contest_id):
 		return render(request, 'extend_contest.html', context)
 
 
+class RankTable:
+	def __init__(self):
+		self.username = ""
+		self.solved_prob = 0
+		self.penalty = 0
+
+
+def getRanklist(request, contest_id):
+
+
+	try:
+		contest = Contest.objects.get(pk = contest_id)
+	except:
+		contest = None
+	context = {}
+	if contest is None:
+		return render(request, 'pagenotfound.html', context)
+
+	user_list = contest.user_list.all()
+	rankList = []
+
+	for user in user_list:
+		newUser = RankTable()
+		newUser.username = user.username
+		username = user.username
+		sol_list = user.solution_list.all()
+		for sol in sol_list:
+			prob = sol.problem
+			if prob.contest == contest and sol.solved == True:
+				newUser.solved_prob = newUser.solved_prob + 1
+				newUser.penalty = newUser.penalty + sol.penalty
+		rankList.append(newUser)
+
+	
+
+	context = {
+		"contest" : contest,
+		"rankList" : rankList,
+	}
+	return render(request, 'get_ranklist.html', context)
+
 
 
 	

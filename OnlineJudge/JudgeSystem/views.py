@@ -373,6 +373,13 @@ class RankTable:
 		self.solved_prob = 0
 		self.penalty = 0
 
+def compare(left , right):
+	if left.solved_prob == right.solved_prob:
+		return (left.penalty - right.penalty)
+
+	else:
+		return (right.solved_prob - left.solved_prob)
+
 
 def getRanklist(request, contest_id):
 
@@ -400,7 +407,7 @@ def getRanklist(request, contest_id):
 				newUser.penalty = newUser.penalty + sol.penalty
 		rankList.append(newUser)
 
-	
+	rankList = sorted(rankList, cmp = compare)
 
 	context = {
 		"contest" : contest,

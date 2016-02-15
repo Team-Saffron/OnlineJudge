@@ -291,7 +291,7 @@ def showContest(request, contest_id):
 		"user_list" : contest.user_list.all(),
 		"problem_list" : Problem.objects.filter(contest = contest),
 		"cur_time" : datetime.datetime.now(),
-		"tot_time" : cur_time - contest.end_time,
+		"tot_time" : contest.end_time - cur_time, 
 		"is_admin" : isAdmin,
 	}
 	return render(request, 'contest_details.html', context)

@@ -6,51 +6,103 @@
 	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	  <script>
+	  	function findDiff()
+	  	{
+	  		var cur = new Date();
+	  		var carry = 0;
+	  		
+	  		// Checking Seconds Left
+	  		var secLeft = {{ contest.end_time.second }} - cur.getSeconds();
+	  		if(secLeft < 0){
+	  			secLeft = secLeft + 60;
+	  			carry = -1;
+	  		}
+
+	  		// Checking Minutes Left
+	  		var minLeft = {{ contest.end_time.minute }} - cur.getMinutes() + carry + 30;
+	  		if(minLeft < 0){
+	  			minLeft = minLeft + 60;
+	  			carry = -1;
+	  		}
+	  		else{
+	  			carry = 0;
+	  		}
+
+	  		// Checking Hours Left
+	  		var hrLeft = {{ contest.end_time.hour }} - cur.getHours() + carry + 5;
+	  		if(hrLeft < 0){
+	  			hrLeft = hrLeft + 24;
+	  			carry = -1;
+	  		}
+	  		else{
+	  			carry = 0;
+	  		}
+
+	  		// Checking Days Left 
+	  		var daysLeft = {{ contest.end_time.day }} - cur.getDate() + carry;
+
+	  		return daysLeft + " Days, " + hrLeft + " Hours, " + minLeft + " Minutes, " + secLeft; 
+	  	}
+	  	function setTimer(){
+	  		var timeleft = findDiff();
+	  		document.getElementById("timer").innerHTML = "Time Left: " + timeleft;
+	  		setTimeout(setTimer, 500);
+	  	}
+  	</script> 
+
 </head>
-<body>
-{% if is_admin == True %}
-<h3> Hello! Admin
-<br>
-You can add problems for this contest here:
-<a href = "{% url 'add_problem' contest.contest_id %}">Add Problem</a>
-<br>
-<a href= "{% url 'extend_contest' contest.contest_id %}"> Extend Contest </a>
-<br>
-{% endif %}
+<body onload = "setTimer()">
+	{% if is_admin == True %}
+	<h3> Hello! Admin
+		<br>
+		You can add problems for this contest here:
+		<a href = "{% url 'add_problem' contest.contest_id %}">Add Problem</a>
+		<br>
+		<a href= "{% url 'extend_contest' contest.contest_id %}"> Extend Contest </a>
+		<br>
+		{% endif %}
 
-<a href = "{% url 'ranklist' contest.contest_id %}"> Current Ranklist </a>
-<br>
-<br>
+		<a href = "{% url 'ranklist' contest.contest_id %}"> Current Ranklist </a>
+		<br>
+		<br>
 
-</h3>
-<h2> 
-<h3>Register:</h3>
-<button type="button" id = "myButton">Register</button>
-		<script>
-		    document.getElementById("myButton").onclick = function(){
-		    	location.href = "/judge/contests/{{contest.contest_id}}/register"
-		    };
-		</script>
-<h2> Problem List: </h2>
-{% for p in problem_list%}
- <li>
-   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
-</li>
-{% endfor %}
-<h2> Registered Users </h2>
-{% for user in user_list%}
- <li>
-   	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
-</li>
-{% endfor %}
-<br>
-<h4>Start Time : {{ contest.start_time }}
+	</h3>
+	<h2> 
+	<h3>Register:</h3>
+	<button type="button" id = "myButton">Register</button>
+			<script>
+			    document.getElementById("myButton").onclick = function(){
+			    	location.href = "/judge/contests/{{contest.contest_id}}/register"
+			    };
+			</script>
+	<h2> Problem List: </h2>
+		{% for p in problem_list%}
+		 <li>
+		   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
+		</li>
+		{% endfor %}
+	<h2> Registered Users </h2>
+	{% for user in user_list%}
+	 <li>
+	   	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
+	</li>
+	{% endfor %}
 	<br>
-	End Time : {{ contest.end_time }}
-	<br>
-	Current Time : {{ cur_time }}
-	Total Time : {{ tot_time }}
-</h4>
+	<h4>
+		Start Time : {{ contest.start_time }}
+		<br>
+		End Time : {{ contest.end_time }}
+		<br>
+		Current Time : {{ cur_time }}
+		<br>
+		Total Time : {{ tot_time }}
+		<br>
+	</h4>
+
+	<h4 id = "timer">
+	</h4>
+	
 
 <br>
 </body>

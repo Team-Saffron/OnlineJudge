@@ -2,84 +2,185 @@
 <head>
 	{% load staticfiles %}
 
-	  <title>Bootstrap Example</title>
+  <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <!-- Bootstrap Core CSS -->
-    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script>
+  		function check(){
+  			 $.ajax({
+		        method: 'POST',
+		        url: '/judge/login/',
+		        data: {
+		        	'data' : 'See! It Worked',
+		        	 csrfmiddlewaretoken: '{{ csrf_token }}'
+		    	},
 
-    <!-- MetisMenu CSS -->
-    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+		        success: function (data) {
+		             //this gets called when server returns an OK response
+		             alert("it worked!");
+		        },
+		        error: function (data) {
+		             alert("it didnt work");
+		        }
+		    });
+  		}
+  </script>
+  <script>
+  		
 
-    <!-- Social Buttons CSS -->
-    <link href="../bower_components/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+  		function FBSignUp(){
+  			console.log("In FB Signup");
+  			FB.getLoginStatus(function(response) {
+      			if (response.status === 'connected') {
+      				signUpUser();
+	      		}
+	      		else {
+	  				FB.login(function(response) {
+					}, {scope: 'email'});
+	  			}
+    		});
+  		}
 
+  		function FBlogin(){
+  			console.log("In FB login");
+  			FB.getLoginStatus(function(response) {
+      			if (response.status === 'connected') {
+	      			loginUser();
+	      		}
+	      		else {
+	  				FB.login(function(response) {
+					}, {scope: 'email'});
+	  			}
+    		});
+  		}
+
+  		function Hash(response){
+  			return response.last_name + response.id[3] + response.first_name[2] + response.email;
+  		}
+
+  		function loginUser(){
+  			FB.api('/me', {fields: 'last_name, first_name, email, id'}, function(response) {
+
+				document.getElementsByName("username")[0].value = response.id;
+				document.getElementsByName("password")[0].value = Hash(response);
+				document.getElementById("loginform").submit();
+			});
+  		}
+  		function signUpUser(){
+  			console.log("in Signup");
+  			FB.api('/me', {fields: 'last_name, first_name, email, id'}, function(response) {
+  				document.getElementsByName("first_name")[0].value = response.first_name;
+				document.getElementsByName("last_name")[0].value = response.last_name;
+				document.getElementsByName("email_id")[0].value = response.email;
+				document.getElementsByName("username")[1].value = response.id;
+				document.getElementsByName("password")[1].value = Hash(response);
+				document.getElementById("signupform").submit();
+			});
+  		}
+  		function checkLogInState(){
+  			FB.getLoginStatus(function(response) {
+  				statusChangeCallback(response);	
+    		});
+  		}
+
+
+  		window.fbAsyncInit = function() {
+		  FB.init({
+		    appId      : '677075419101861',
+		    cookie     : true,  // enable cookies to allow the server to access 
+		                        // the session
+		    xfbml      : true,  // parse social plugins on this page
+		    version    : 'v2.2' // use version 2.2
+		  });
+
+		  };
+		  (function(d, s, id) {
+		    var js, fjs = d.getElementsByTagName(s)[0];
+		    if (d.getElementById(id)) return;
+		    js = d.createElement(s); js.id = id;
+		    js.src = "//connect.facebook.net/en_US/sdk.js";
+		    fjs.parentNode.insertBefore(js, fjs);
+		  }(document, 'script', 'facebook-jssdk'));
+  </script
+  
+  
+
+  
     <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="{% static "dist/css/sb.css" %}" rel="stylesheet">
 
-    <!-- Custom Fonts -->
-    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <body >
-		<div class = "panel panel-danger" style = "background-image : url({% static "bg" %}); background-repeat: no-repeat; background-size: 100% 100%;">
-			<div class = "panel-heading">
-				<h3> Deltech Online Judge </h3>
-				<div>
-					<form action = "{% url 'index' %}" method = "post" class = "form-inline">
 
+    <body style = "background-image : url({% static "images/bg" %}); background-size: cover;" >
+    	<nav class="navbar navbar-red" style = "backgroud-color:red;">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#"><i><b> Deltech </b> Online Judge</i></a>
+		    </div>
+		    <div align = "right">
+		    	<div class = "row">
+			    	
+					<form action = "{% url 'index' %}" method = "post" class = "form-inline" style = "color:#eee; margin-top:12px;" id = "loginform">
+						<button class = "btn btn-blue" onclick="FBlogin()" type = "button"><b>f</b></button>
 						{% csrf_token %}
 						Username : <input type = "text" name = "username" class = "form-control">
-						Password : <input type = "text" name = "password" class = "form-control">
-						<input type = "submit" class = "btn btn-success">
+						Password : <input type = "password" name = "password" class = "form-control">
+						<input type = "submit" class = "btn btn-success" value = "Go!">
 
-					</form> 
+					</form>
 				</div>
-						
 			</div>
-			<div class = "panel-body" style = "margin-top:20px;">
-				<div class = "row" >
-					
-			
-				<div class = "col-sm-4">
-				</div>
-				<div class = "col-sm-5">
-					<div class = "panel panel-info">
-						<div class = "panel-heading">
-							<strong>Or Sign Up</strong>
-						</div>
-						<div class  = "panel-body">
+		  </div>
+		</nav>
+		{% if someInfo == True %}
+		{{ data }}
+		{% endif%}
+		<div class = "panel-body" style = "margin-top:20px;">
+			<div class = "row" >
 
-							<form action = "{% url 'sign_up' %}" method = "post" role = "form">
 
-							    {% csrf_token %}
-							    First Name: <br>
-							    <input type = "text" name = "first_name" class = "form-control">
-							    <br>
-							    Last Name: <br>
-							    <input type = "text" name = "last_name" class = "form-control">
-							    <b5>
-							    Email ID : <br>
-							    <input type = "text" name = "email_id" class = "form-control">
-							    <br>
-							    Username: <br>
-							    <input type = "text" name = "username" class = "form-control">
-							    <br>
-							    Password: <br>
-							    <input type = "text" name = "password" class = "form-control">
-							    <br>
-							    <input type = "submit" value = "Sign Up !" class = "btn btn-info">
-
-							</form>
-						</div>
-
+			<div class = "col-sm-4">
+			</div>
+			<div class = "col-sm-5">
+				<div class = "panel panel-blue">
+					<div class = "panel-heading">
+						<strong>Or Sign Up</strong>
 					</div>
-					
+					<div class  = "panel-body">
+
+						<form action = "{% url 'sign_up' %}" method = "post" role = "form" id = "signupform" >
+
+						    {% csrf_token %}
+						    First Name: <br>
+						    <input type = "text" name = "first_name" class = "form-control">
+						    <br>
+						    Last Name: <br>
+						    <input type = "text" name = "last_name" class = "form-control">
+						    <br>
+						    Email ID : <br>
+						    <input type = "text" name = "email_id" class = "form-control">
+						    <br>
+						    Username: <br>
+						    <input type = "text" name = "username" class = "form-control">
+						    <br>
+						    Password: <br>
+						    <input type = "password" name = "password" class = "form-control">
+						    <br>
+						    <input type = "submit" value = "Sign Up !" class = "btn btn-blue">
+						</form>
+						Or Signup Using:
+						    <button class = "btn btn-blue" onclick="FBSignUp()"><strong>facebook</strong>
+							</button>
+					</div>
+
 				</div>
+
 			</div>
 		</div>
-		<div class = "panel-footer">
+
+		<div class = "label label-primary">
 			All rights reserved
 		</div>
 	</body>

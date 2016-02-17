@@ -3,7 +3,7 @@ import Jury
 import dateutil.parser; 
 from django.shortcuts import render
 from .models import Solution, Problem, JudgeUser, Contest
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -14,7 +14,17 @@ from django.utils import timezone
 # Create your views here.
 
 def loginPage(request):
-	context = {}
+
+	context = {
+		'someInfo' : False,
+	}
+	if request.is_ajax():
+		print "Hello"
+		context = {
+			'someInfo' : True,
+			'data' : 'So! here'
+		}
+	print "Hello|||||"
 	return render(request,'login_page.html',context)
 
 def signUp(request):
@@ -23,19 +33,27 @@ def signUp(request):
 	email = request.POST['email_id']
 	first_name = request.POST['first_name']
 	last_name = request.POST['last_name']
+	if username == "" or password == "" or email == "" or first_name == "":
+		context = {
+			"message" : "Can't Signup! Username, Password, email or First Name can't be empty!"
+		}
+		return render(request, 'show_message.html', context)
+
+
 	try:
 		user = User.objects.get(username = username)
 	except ObjectDoesNotExist:
 		user = None
-	if user is None:
-		
+	if user is None:	
 		try:
 			user = User.objects.get(email = email)
 		except ObjectDoesNotExist:
 			user = None
 	if user is not None:
-		context = {}
-		return HttpResponseRedirect(reverse('login_page'))
+		context = {
+			"message" : "User with this username or email already exists"
+		}
+		return render(request, 'show_message.html', context)
 	else:
 		u = JudgeUser.objects.create(username = username , email = email , first_name = first_name , last_name = last_name)
 		u.set_password(password)
@@ -415,7 +433,14 @@ def getRanklist(request, contest_id):
 	}
 	return render(request, 'get_ranklist.html', context)
 
-
-
+def logout_view(request):
+	print "hello!"
+	logout(request)
 	
-	
+	return HttpResponseRedirect(reverse('login_page'))
+
+def fbtest(request):
+	context = {
+
+	}
+	return render(request, 'fbtest.html', context)

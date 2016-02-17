@@ -33,6 +33,10 @@ urlpatterns = [
     url(r'^contests/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/register/', views.registerForContest, name = 'register_for_contest'),
     url(r'^createContest/', views.createContest, name = 'create_contest'),
     url(r'^extendContest/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/', views.extendContest, name = 'extend_contest'),
-    url(r'^ranklist/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/', views.getRanklist, name = 'ranklist')
+    url(r'^ranklist/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/', views.getRanklist, name = 'ranklist'),
+    url(r'^logout/', views.logout_view, name = 'logout'),
+    url(r'^fbtest/', views.fbtest, name = 'fbtest'),
+
+
 
 ]

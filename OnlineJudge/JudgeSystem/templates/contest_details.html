@@ -20,7 +20,7 @@
 	  		}
 
 	  		// Checking Minutes Left
-	  		var minLeft = {{ contest.end_time.minute }} - cur.getMinutes() + carry + 30;
+	  		var minLeft = ({{ contest.end_time.minute }} - cur.getMinutes() + carry + 30) % 60;
 	  		if(minLeft < 0){
 	  			minLeft = minLeft + 60;
 	  			carry = -1;

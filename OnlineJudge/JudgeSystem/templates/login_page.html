@@ -8,26 +8,26 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script>
-  		function check(){
-  			 $.ajax({
-		        method: 'POST',
-		        url: '/judge/login/',
-		        data: {
-		        	'data' : 'See! It Worked',
-		        	 csrfmiddlewaretoken: '{{ csrf_token }}'
-		    	},
+  	  <link href="{% static 'dist/css/sb.css' %}" rel="stylesheet">
+	 <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+	 <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
 
-		        success: function (data) {
-		             //this gets called when server returns an OK response
-		             alert("it worked!");
-		        },
-		        error: function (data) {
-		             alert("it didnt work");
-		        }
-		    });
-  		}
-  </script>
+		<!-- Bootstrap Core CSS -->
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href= "{% static 'bower_components/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href= "{% static 'dist/css/timeline.css' %}"rel="stylesheet">
+
+   
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'bower_components/morrisjs/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
   <script>
   		
 
@@ -104,7 +104,7 @@
 		    js.src = "//connect.facebook.net/en_US/sdk.js";
 		    fjs.parentNode.insertBefore(js, fjs);
 		  }(document, 'script', 'facebook-jssdk'));
-  </script
+  </script>
   
   
 
@@ -113,7 +113,7 @@
     <link href="{% static "dist/css/sb.css" %}" rel="stylesheet">
 
 
-    <body style = "background-image : url({% static "images/bg" %}); background-size: cover;" >
+    <body style = "background-image : url({% static "images/bg3" %}); background-size: cover;" >
     	<nav class="navbar navbar-red" style = "backgroud-color:red;">
 		  <div class="container-fluid">
 		    <div class="navbar-header">
@@ -123,7 +123,7 @@
 		    	<div class = "row">
 			    	
 					<form action = "{% url 'index' %}" method = "post" class = "form-inline" style = "color:#eee; margin-top:12px;" id = "loginform">
-						<button class = "btn btn-blue" onclick="FBlogin()" type = "button"><b>f</b></button>
+						<button class = "btn btn-primary" onclick="FBlogin()" type = "button"><i class="fa fa-facebook"></i></button>
 						{% csrf_token %}
 						Username : <input type = "text" name = "username" class = "form-control">
 						Password : <input type = "password" name = "password" class = "form-control">
@@ -169,9 +169,9 @@
 						    <input type = "password" name = "password" class = "form-control">
 						    <br>
 						    <input type = "submit" value = "Sign Up !" class = "btn btn-blue">
-						</form>
-						Or Signup Using:
-						    <button class = "btn btn-blue" onclick="FBSignUp()"><strong>facebook</strong>
+						</form>	
+
+						    <button class = "btn btn-blue btn-social btn-facebook btn-block" onclick="FBSignUp()" ><i class = "fa fa-facebook" style = "float:left;"></i> Sign Up with facebook
 							</button>
 					</div>
 
@@ -185,15 +185,20 @@
 		</div>
 	</body>
 	<!-- jQuery -->
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+   <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="{% static 'bower_components/metisMenu/dist/metisMenu.min.js' %}"></script>
 
+    <!-- Morris Charts JavaScript -->
+    <script src="{% static 'bower_components/raphael/raphael-min.js' %}"></script>
+    <script src="{% static 'bower_components/morrisjs/morris.min.js' %}"></script>
+    <script src="{% static 'js/morris-data.js' %}"></script>
+    
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
+    <script src="{% static 'dist/js/sb-admin-2.js' %}"></script>
 </head>
 </html>

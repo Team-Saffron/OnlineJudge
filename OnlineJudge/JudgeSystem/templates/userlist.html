@@ -1,17 +1,112 @@
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	  {% load staticfiles %}
 	  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	  <link href="{% static "dist/css/sb.css" %}" rel="stylesheet">
+	 <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+	 <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
+
+		<!-- Bootstrap Core CSS -->
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href= "{% static 'bower_components/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href= "{% static 'dist/css/timeline.css' %}"rel="stylesheet">
+
+   
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'bower_components/morrisjs/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <script>
+    	function showProblem(contest, problem_name){
+    		console.log("HERE\n");
+    		console.log(contest, problem_name);
+    		location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
+    	}
+    </script>
 </head>
-<body>
-	<h2>All user in Database are:<h2>
-		{% for user in users %}
-		<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
-		<br>
-		{% endfor %}
-</body>
+	<body style = "background-image : url({% static "images/bg3" %}); background-size: cover;">
+		<nav class="navbar navbar-default navbar-static-top" style = "backgroud-color:red;" style="margin-bottom: 0">
+		  
+		    <div class="navbar-header">
+		    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+		      <a class="navbar-brand" href="{% url 'index' %}" style = "font-family: 'Muli', sans-serif;"><i><b> Deltech </b> Online Judge</i></a>
+		    </div>
+	     
+	
+		     	<div class="navbar-default sidebar" role="navigation">
+
+	                <div class="sidebar-nav navbar-collapse">
+	                	<ul class="nav" id="side-menu">
+	                		
+	                		<li>
+	                			<a href = "{% url 'add_problem' "Practice" %}" class = ""><i class="fa fa-plus fa-fw"></i> Add Problem</a>
+	                		</li>
+	                		<li>
+	                			 <a href = "{% url 'create_contest' %}"><i class="fa fa-pencil fa-fw"></i> Create your own contest</a>
+	                		</li>
+	                		<li>
+	                			<a href = "{% url 'userlist' %}"  ><i class="fa fa-users fa-fw"></i> All Users
+	                			</a> 
+	                		</li>
+	                		<li >
+	                			<a data-toggle = "collapse" data-target="#demo"><i class="fa fa-users fa-fw"></i> Top Users <span class="fa arrow"></span></a>
+	                			<ul class="nav nav-second-level collapse" id = "demo">
+	                				{% for u in users %}
+	                				<li>
+	                					<a href = "{% url 'user_profile' u.username %}">{{u.first_name}}</a>
+	                				</li>
+	                				{% endfor %}
+	                			</ul>
+	                		</li>
+	                		<li>
+	                			<a href = "{% url 'AllContests' %}"><i class="fa fa-list fa-fw"></i> All Contests </a>
+	                		</li>
+	                	</ul>
+	                </div>
+	            </div>
+        	
+        	<ul class="nav navbar-top-links navbar-right">
+        		<li class = "dropdown" style = "margin-top:12px;">
+                    <ul>
+                    	<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
+                        </li>       
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+          
+	    </nav>
+
+	        <div id = "page-wrapper">
+				<h2>All user in Database are:<h2>
+					{% for user in users %}
+					<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
+					<br>
+					{% endfor %}
+				</div>
+	</body>
 </html>

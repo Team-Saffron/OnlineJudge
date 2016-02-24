@@ -24,7 +24,6 @@ def loginPage(request):
 			'someInfo' : True,
 			'data' : 'So! here'
 		}
-	print "Hello|||||"
 	return render(request,'login_page.html',context)
 
 def signUp(request):
@@ -92,6 +91,7 @@ def mainView(request):
 			context = {
 			    'problem' : problems,
 			    'user' : user,
+			    'users' : JudgeUser.objects.all(),
 			}
 			return render(request,'index.html',context)
 		else:
@@ -116,7 +116,9 @@ def probDetail(request, prob_id, contest_id):
             	context = {
             		'problem' : problem,
             		'user' : request.user,
-            		'sol_id' : sol_id
+            		'sol_id' : sol_id,
+            		'users' : JudgeUser.objects.all(),
+            		'sol_obj' : sol_obj,
             	}
             	return render(request, 'prob_detail.html', context)
             else:
@@ -258,11 +260,13 @@ def userProfile(request, username):
 		}
 		return render(request, 'pagenotfound.html', context)
 	addList = Problem.objects.filter(setter = U).all()
-
+	curUser = request.user
 	context = {
 		"user" : U,
+		"cuser" : curUser,
 		"tryList" : U.solution_list.all(),
-		"addList" : addList
+		"addList" : addList,
+		"users" : JudgeUser.objects.all(),
 	}
 
 	return render(request, 'userprofile.html', context)
@@ -306,6 +310,7 @@ def showContest(request, contest_id):
 
  	context = {
 		"contest" : contest,
+		"users" : JudgeUser.objects.all(),
 		"user_list" : contest.user_list.all(),
 		"problem_list" : Problem.objects.filter(contest = contest),
 		"cur_time" : datetime.datetime.now(),
@@ -318,6 +323,7 @@ def showAllContests(request):
 	
 	context = {
 		"contests" : Contest.objects.all(),
+		"users" : JudgeUser.objects.all(),
 	}
 	return render(request, 'show_all_contests.html', context)
 

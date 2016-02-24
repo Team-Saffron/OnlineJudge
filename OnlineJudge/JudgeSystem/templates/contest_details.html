@@ -1,12 +1,34 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>{{ contest.contest_id }}</title>
+	  {% load staticfiles %}
+	  <title>Bootstrap Example</title>
 	  <meta charset="utf-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
 	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	  <script>
+	  <link href="{% static "dist/css/sb.css" %}" rel="stylesheet">
+	 <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+	 <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
+
+		<!-- Bootstrap Core CSS -->
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href= "{% static 'bower_components/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href= "{% static 'dist/css/timeline.css' %}"rel="stylesheet">
+
+   
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'bower_components/morrisjs/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+     <script>
 	  	function findDiff()
 	  	{
 	  		var cur = new Date();
@@ -50,60 +72,123 @@
 	  		setTimeout(setTimer, 500);
 	  	}
   	</script> 
-
 </head>
-<body onload = "setTimer()">
-	{% if is_admin == True %}
-	<h3> Hello! Admin
-		<br>
-		You can add problems for this contest here:
-		<a href = "{% url 'add_problem' contest.contest_id %}">Add Problem</a>
-		<br>
-		<a href= "{% url 'extend_contest' contest.contest_id %}"> Extend Contest </a>
-		<br>
-		{% endif %}
-
-		<a href = "{% url 'ranklist' contest.contest_id %}"> Current Ranklist </a>
-		<br>
-		<br>
-
-	</h3>
-	<h2> 
-	<h3>Register:</h3>
-	<button type="button" id = "myButton">Register</button>
-			<script>
-			    document.getElementById("myButton").onclick = function(){
-			    	location.href = "/judge/contests/{{contest.contest_id}}/register"
-			    };
-			</script>
-	<h2> Problem List: </h2>
-		{% for p in problem_list%}
-		 <li>
-		   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
-		</li>
-		{% endfor %}
-	<h2> Registered Users </h2>
-	{% for user in user_list%}
-	 <li>
-	   	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
-	</li>
-	{% endfor %}
-	<br>
-	<h4>
-		Start Time : {{ contest.start_time }}
-		<br>
-		End Time : {{ contest.end_time }}
-		<br>
-		Current Time : {{ cur_time }}
-		<br>
-		Total Time : {{ tot_time }}
-		<br>
-	</h4>
-
-	<h4 id = "timer">
-	</h4>
+	<body style = "background-image : url({% static "images/bg3" %}); background-size: cover;" onload = "setTimer()">
+		<nav class="navbar navbar-default navbar-static-top" style = "backgroud-color:red;" style="margin-bottom: 0">
+		  
+		    <div class="navbar-header">
+		    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+		      <a class="navbar-brand" href="{% url 'index' %}" style = "font-family: 'Muli', sans-serif;"><i><b> Deltech </b> Online Judge</i></a>
+		    </div>
+	     
 	
+		     	<div class="navbar-default sidebar" role="navigation">
 
-<br>
+	                <div class="sidebar-nav navbar-collapse">
+	                	<ul class="nav" id="side-menu">
+	                		
+	                		<li>
+	                			<a href = "{% url 'add_problem' "Practice" %}" class = ""><i class="fa fa-plus fa-fw"></i> Add Problem</a>
+	                		</li>
+	                		<li>
+	                			 <a href = "{% url 'create_contest' %}"><i class="fa fa-pencil fa-fw"></i> Create your own contest</a>
+	                		</li>
+	                		<li>
+	                			<a href = "{% url 'userlist' %}"  ><i class="fa fa-users fa-fw"></i> All Users
+	                			</a> 
+	                		</li>
+	                		<li >
+	                			<a data-toggle = "collapse" data-target="#demo"><i class="fa fa-users fa-fw"></i> Top Users <span class="fa arrow"></span></a>
+	                			<ul class="nav nav-second-level collapse" id = "demo">
+	                				{% for u in users %}
+	                				<li>
+	                					<a href = "{% url 'user_profile' u.username %}">{{u.first_name}}</a>
+	                				</li>
+	                				{% endfor %}
+	                			</ul>
+	                		</li>
+	                		<li>
+	                			<a href = "{% url 'AllContests' %}"><i class="fa fa-list fa-fw"></i> All Contests </a>
+	                		</li>
+	                	</ul>
+	                </div>
+	            </div>
+        	
+        	<ul class="nav navbar-top-links navbar-right">
+        		<li class = "dropdown" style = "margin-top:12px;">
+                    <ul>
+                    	<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
+                        </li>       
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+          
+	    </nav>
+
+	        <div id = "page-wrapper">
+				{% if is_admin == True %}
+				<h3> Hello! Admin
+					<br>
+					You can add problems for this contest here:
+					<a href = "{% url 'add_problem' contest.contest_id %}">Add Problem</a>
+					<br>
+					<a href= "{% url 'extend_contest' contest.contest_id %}"> Extend Contest </a>
+					<br>
+					{% endif %}
+
+					<a href = "{% url 'ranklist' contest.contest_id %}"> Current Ranklist </a>
+					<br>
+					<br>
+
+				</h3>
+				<h2> 
+				<h3>Register:</h3>
+				<button type="button" id = "myButton">Register</button>
+						<script>
+						    document.getElementById("myButton").onclick = function(){
+						    	location.href = "/judge/contests/{{contest.contest_id}}/register"
+						    };
+						</script>
+				<h2> Problem List: </h2>
+					{% for p in problem_list%}
+					 <li>
+					   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
+					</li>
+					{% endfor %}
+				<h2> Registered Users </h2>
+				{% for user in user_list%}
+				 <li>
+				   	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
+				</li>
+				{% endfor %}
+				<br>
+				<h4>
+					Start Time : {{ contest.start_time }}
+					<br>
+					End Time : {{ contest.end_time }}
+					<br>
+					Current Time : {{ cur_time }}
+					<br>
+					Total Time : {{ tot_time }}
+					<br>
+				</h4>
+
+				<h4 id = "timer">
+				</h4>
+				
+
+			</div>
 </body>
 </html>

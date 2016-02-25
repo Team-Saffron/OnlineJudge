@@ -92,17 +92,20 @@
 				<div class = "panel-body">
 					<div class = "row">
 						<div class = "col-sm-12">
-							{{problem.statement}}
+							{{problem.statement|linebreaksbr}}
 						</div>
 					</div>
+					<br>
 					<div class = "row">
 						<div class = "col-sm-9">
 							Sample:
 							<div class = "well well-lg">
-								Input:
+								Input:<br>
+								{{ problem.sample_input |linebreaksbr}}
 							</div>
 							<div class = "well well-lg">
-								Output:
+								Output:<br>
+								{{ problem.sample_output |linebreaksbr}}
 							</div>
 						</div>
 						<div class = "col-sm-3">

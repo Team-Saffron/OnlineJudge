@@ -221,13 +221,15 @@ def addProblem(request, contest_id):
 			statement = request.POST["statement"]
 			input_data = request.POST["input"]
 			output_data = request.POST["output"]
+			sample_input = request.POST["Sinput"]
+			sample_output = request.POST["Soutput"]
 			contest_name = request.POST["contest_name"]
 
 			contest = Contest.objects.get(pk = contest_name)
 
 			#Created New Problem
 
-			newProblem = Problem(name = prob_name, p_id = prob_id, statement = statement, setter = U, contest = contest)
+			newProblem = Problem(name = prob_name, p_id = prob_id, statement = statement, setter = U, contest = contest, sample_input = sample_input, sample_output = sample_output)
 			newProblem.save()
 
 			#Save Correct input and output

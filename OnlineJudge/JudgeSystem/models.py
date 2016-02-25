@@ -21,6 +21,8 @@ class Problem(models.Model):
 	statement = models.CharField(max_length = 2000)
 	setter = models.ForeignKey(JudgeUser, null = True, related_name = 'SetterOfProblem')
 	contest = models.ForeignKey('Contest', null = True, related_name = 'ContestOfProblem')
+	sample_input = models.CharField(max_length = 200, null = True)
+	sample_output = models.CharField(max_length = 200, null = True)
 
 	def __str__(self):
 		return (str(self.contest) + "/" + self.p_id)

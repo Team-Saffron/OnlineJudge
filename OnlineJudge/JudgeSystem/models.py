@@ -6,6 +6,11 @@ from django.contrib.auth.models import User
 
 class JudgeUser(User):
 	solution_list = models.ManyToManyField('Solution', related_name = 'SolutionListOfUser')
+	WA_Count = models.IntegerField(default = 1)
+	TLE_Count = models.IntegerField(default = 1)
+	AC_Count = models.IntegerField(default = 1)
+	RE_Count = models.IntegerField(default = 1)
+	CE_Count = models.IntegerField(default = 1)
 	def __str__(self):
 		return str(self.username)
 	contrib_pts = models.IntegerField(default = 0)

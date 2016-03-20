@@ -184,8 +184,20 @@ def getResult(request, prob_id):
 		sol_obj.submission_time = datetime.datetime.now()
 
 	sol_obj.verdict = Jury.getVerdict(sol_obj)
-
+	print "BUFF"
+	if sol_obj.verdict == "Success":
+		solver.AC_Count +=1;
+	if sol_obj.verdict == "Compilation Error":
+		solver.CE_Count +=1
+	if sol_obj.verdict == "Time Limit Exceeded":
+		solver.TLE_Count +=1
+	if sol_obj.verdict == "Wrong Answer":
+		solver.WA_Count +=1
+	if sol_obj.verdict == "Runtime Error":
+		solver.RE_Count +=1
 	
+	solver.save()
+
 	if sol_obj.verdict == "Success":
 		sol_obj.solved = 1
 	elif sol_obj.solved != 1:
@@ -263,12 +275,25 @@ def userProfile(request, username):
 		return render(request, 'pagenotfound.html', context)
 	addList = Problem.objects.filter(setter = U).all()
 	curUser = request.user
+	solved = tried = added = 0
+	for sol in U.solution_list.all():
+		if sol.solved == True:
+			solved = solved + 1
+		tried = tried + 1
+
+	for sol in addList:
+		added = added + 1
+
+
 	context = {
 		"user" : U,
 		"cuser" : curUser,
 		"tryList" : U.solution_list.all(),
 		"addList" : addList,
 		"users" : JudgeUser.objects.all(),
+		"solved" : solved,
+		"tried" : tried,
+		"added" : added,
 	}
 
 	return render(request, 'userprofile.html', context)

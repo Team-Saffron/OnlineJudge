@@ -7,6 +7,7 @@
 	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	  <link href="{% static "dist/css/sb.css" %}" rel="stylesheet">
 		<!-- Bootstrap Core CSS -->
     <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -30,6 +31,45 @@
     		console.log(contest, problem_name);
     		location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
     	}
+    	$(document).ready(function(){
+    		
+
+	    	var data = [
+			    {
+			        value: {{user.AC_Count}},
+			        color:"#37B437",
+			        highlight: "#5FFA5E",
+			        label: "ACCEPTED"
+			    },
+			    {
+			        value: {{user.WA_Count}},
+			        color: "#FD4440",
+			        highlight: "#FF4840",
+			        label: "Wrong Answer"
+			    },
+			    {
+			        value: {{user.RE_Count}},
+			        color: "#A0542D",
+			        highlight: "#B06840",
+			        label: "RunTime Error"
+			    }, 
+			    {
+			        value: {{user.CE_Count}},
+			        color: "#5DB4BC",
+			        highlight: "#5FC8B0",
+			        label: "Compilation Error"
+			    }, 
+			    {
+			        value: {{user.TLE_Count}},
+			        color: "#FDB400",
+			        highlight: "#FFC800",
+			        label: "Time Limit Exceeded"
+			    }
+
+			]
+	    	var ctx = document.getElementById("userchart").getContext("2d");
+			var myDoughnutChart = new Chart(ctx).Doughnut(data);
+		});
     </script>
 </head>
 	<body style = "background-image : url({% static "images/bg3" %}); background-size: cover;">
@@ -94,10 +134,32 @@
 		<div id = "page-wrapper">
 			<div class = "panel panel-primary">
 				<div class = "panel-body">
-					<img src = "{% static 'images/no-user-image.gif'%}" style = "border: 1px solid #3939df;"></img>
-					<h1>#{{user.username}}</h1>
-					<h2>{{user.first_name}} {{user.last_name}}</h2>
-					<h2>{{user.contrib_pts}}</h2>
+					<div class = "row">
+						<div class = "col-sm-3">
+							<img src = "{% static 'images/no-user-image.gif'%}" style = "border: 1px solid #3939df;"></img>
+							<h1>#{{user.username}}</h1>
+							<h2>{{user.first_name}} {{user.last_name}}</h2>
+							<h2>{{user.contrib_pts}}</h2>
+						</div>
+						<div class = "col-sm-4" align = "center">
+							<h3>
+								Problems Solved:
+								<br>
+								{{solved}}
+								<br><br>
+								Problems Tried:
+								<br>
+								{{tried}}
+								<br><br>
+								Problmes Added:
+								<br>
+								{{added}}						
+
+						</div>
+						<div class = "col-sm-5">
+							<canvas id="userchart" width="400" height="400"></canvas>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class = "well well-lg">

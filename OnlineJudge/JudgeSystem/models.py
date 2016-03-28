@@ -66,5 +66,16 @@ class Contest(models.Model):
 	def __str__(self):
 		return str(self.contest_id)	
 
+class Comment(models.Model):
+	addedby = models.ForeignKey('JudgeUser', related_name = 'commentbyUser')
+	description = models.CharField(max_length = 150)
+	timestamp = models.DateTimeField()
+	blogpost = models.ForeignKey('BlogPost', related_name = 'commentOnBlog')
+
+class BlogPost(models.Model):
+	heading = models.CharField(max_length = 50)
+	addedby = models.ForeignKey('JudgeUser', related_name = 'postbyUser')
+	description = models.CharField(max_length = 250)
+	timestamp = models.DateTimeField()
 
 

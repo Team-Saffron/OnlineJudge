@@ -2,7 +2,7 @@ import datetime
 import Jury
 import dateutil.parser; 
 from django.shortcuts import render
-from .models import Solution, Problem, JudgeUser, Contest
+from .models import Solution, Problem, JudgeUser, Contest, BlogPost, Comment
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ObjectDoesNotExist
@@ -241,7 +241,14 @@ def addProblem(request, contest_id):
 
 			#Created New Problem
 
-			newProblem = Problem(name = prob_name, p_id = prob_id, statement = statement, setter = U, contest = contest, sample_input = sample_input, sample_output = sample_output)
+			newProblem = Problem(
+							name = prob_name, 
+							p_id = prob_id, 
+							statement = statement, 
+							setter = U, 
+							contest = contest, 
+							sample_input = sample_input, sample_output = sample_output
+						)
 			newProblem.save()
 
 			#Save Correct input and output
@@ -477,3 +484,25 @@ def fbtest(request):
 
 	}
 	return render(request, 'fbtest.html', context)
+
+def showforum(request):
+	users = JudgeUser.objects.all();
+	context = {
+		"users" : users
+
+	}
+	return render(request, 'forum.html', context)
+
+def showpost(request, post_id):
+	users = JudgeUser.objects.all()
+	blogpost = BlogPost.objects.get(pk = post_id)
+	comments = Comment.objects.filter(blogpost = blogpost)
+	#size = comments.size()
+	context = {
+		"users" : users,
+		"blogpost" : blogpost,
+		"comments" : comments,
+	#	"size" : size,
+
+	}
+	return render(request, 'forumpost.html', context)

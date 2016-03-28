@@ -36,7 +36,6 @@ urlpatterns = [
     url(r'^ranklist/(?P<contest_id>([0-9]|[a-z]|[A-Z])+)/', views.getRanklist, name = 'ranklist'),
     url(r'^logout/', views.logout_view, name = 'logout'),
     url(r'^fbtest/', views.fbtest, name = 'fbtest'),
-
-
-
+    url(r'^forum/', views.showforum, name = 'showforum'),
+    url(r'^post/(?P<post_id>[0-9]+)/', views.showpost, name = 'showpost'),
 ]

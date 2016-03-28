@@ -68,14 +68,14 @@ class Contest(models.Model):
 
 class Comment(models.Model):
 	addedby = models.ForeignKey('JudgeUser', related_name = 'commentbyUser')
-	description = models.CharField(max_length = 150)
+	description = models.TextField(max_length = 1000)
 	timestamp = models.DateTimeField()
 	blogpost = models.ForeignKey('BlogPost', related_name = 'commentOnBlog')
 
 class BlogPost(models.Model):
 	heading = models.CharField(max_length = 50)
 	addedby = models.ForeignKey('JudgeUser', related_name = 'postbyUser')
-	description = models.CharField(max_length = 250)
+	description = models.TextField(max_length = 1000)
 	timestamp = models.DateTimeField()
 
 

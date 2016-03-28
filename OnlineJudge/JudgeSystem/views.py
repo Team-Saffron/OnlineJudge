@@ -486,9 +486,19 @@ def fbtest(request):
 	return render(request, 'fbtest.html', context)
 
 def showforum(request):
+	if request.method == 'POST':
+		curUser = request.user
+		curUser = JudgeUser.objects.get(username = curUser.username) 
+		cur_time = timezone.now()
+		heading = request.POST["heading"]
+		content = request.POST["content"]
+		blogpost = BlogPost(addedby = curUser, timestamp = cur_time, heading = heading, description = content)
+		blogpost.save()
 	users = JudgeUser.objects.all();
+	blogposts = BlogPost.objects.all();
 	context = {
-		"users" : users
+		"users" : users,
+		"blogposts" :  blogposts,
 
 	}
 	return render(request, 'forum.html', context)
@@ -497,12 +507,9 @@ def showpost(request, post_id):
 	users = JudgeUser.objects.all()
 	blogpost = BlogPost.objects.get(pk = post_id)
 	comments = Comment.objects.filter(blogpost = blogpost)
-	#size = comments.size()
 	context = {
 		"users" : users,
 		"blogpost" : blogpost,
 		"comments" : comments,
-	#	"size" : size,
-
 	}
 	return render(request, 'forumpost.html', context)

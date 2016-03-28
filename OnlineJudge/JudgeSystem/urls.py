@@ -37,5 +37,5 @@ urlpatterns = [
     url(r'^logout/', views.logout_view, name = 'logout'),
     url(r'^fbtest/', views.fbtest, name = 'fbtest'),
     url(r'^forum/', views.showforum, name = 'showforum'),
-    url(r'^post/(?P<post_id>[0-9]+)/', views.showpost, name = 'showpost'),
+    url(r'^posts/(?P<post_id>[0-9]+)/', views.showpost, name = 'showpost'),
 ]

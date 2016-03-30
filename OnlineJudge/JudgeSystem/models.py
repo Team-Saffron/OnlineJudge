@@ -29,6 +29,8 @@ class Problem(models.Model):
 	sample_input = models.CharField(max_length = 200, null = True)
 	sample_output = models.CharField(max_length = 200, null = True)
 
+	comments = models.ForeignKey('BlogPost', related_name = "CommentsOnProblem", on_delete = models.CASCADE, null = True)
+
 	def __str__(self):
 		return (str(self.contest) + "/" + self.p_id)
 
@@ -77,5 +79,10 @@ class BlogPost(models.Model):
 	addedby = models.ForeignKey('JudgeUser', related_name = 'postbyUser')
 	description = models.TextField(max_length = 1000)
 	timestamp = models.DateTimeField()
+	tags = models.ManyToManyField('Tag', related_name = 'tagOfPost')
 
+	def __str__(self):
+		return str(self.heading)
 
+class Tag(models.Model):
+	tag = models.CharField(max_length = 100)

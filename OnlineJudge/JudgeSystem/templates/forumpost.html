@@ -117,7 +117,7 @@
           <ul class="nav navbar-top-links navbar-right">
             <li class = "dropdown" style = "margin-top:12px;">
                     <ul>
-                      <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                      <li><a href="{% url 'showforum' %}"><i class="fa fa-comments-o fa-fw"></i> Discuss</a>
                         </li>
                         <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
                         </li>       
@@ -147,9 +147,10 @@
       <hr>
 
       <h4>Leave a Comment:</h4>
-      <form role="form">
+      <form role="form" action = "{% url 'showpost' blogpost.id %}" method = "post">
+        {% csrf_token %}
         <div class="form-group">
-          <textarea class="form-control" rows="3" required></textarea>
+          <textarea name="content" id = "txtu" class="form-control" rows="3"  required ></textarea>
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
       </form>
@@ -163,7 +164,7 @@
           <img src = "{% static 'images/no-user-image.gif'%}" style = "border: 1px solid #39df39;" height="65" width="65" alt="Avatar">
         </div>
         <div class="col-sm-10">
-          <h4>{{comment.addedby.username}} <small>{{comment.timestamp}}</small></h4>
+          <h4><a style="text-decoration:none;" href="{% url 'user_profile' comment.addedby.username %}">{{ comment.addedby }} </a><small>{{comment.timestamp}}</small></h4>
           <p>{{ comment.description }}</p>
           <br>
         </div>

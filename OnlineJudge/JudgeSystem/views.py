@@ -2,7 +2,7 @@ import datetime
 import Jury
 import dateutil.parser; 
 from django.shortcuts import render
-from .models import Solution, Problem, JudgeUser, Contest, BlogPost, Comment
+from .models import Solution, Problem, JudgeUser, Contest, BlogPost, Comment, Tag
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ObjectDoesNotExist
@@ -100,7 +100,17 @@ def mainView(request):
 
 
 def probDetail(request, prob_id, contest_id):
-	print prob_id
+	if request.method == "POST":
+		contest = Contest.objects.get(pk = contest_id)
+		problem = Problem.objects.filter(p_id = prob_id).get(contest = contest)
+		blogpost = problem.comments
+		if blogpost is not None:
+			user = request.user
+			user = JudgeUser.objects.get(username = user.username)
+			desc = request.POST["desc"]
+			comment = Comment(addedby = user, description = desc, timestamp = timezone.now(), blogpost = blogpost)
+			comment.save()
+
 	if request.user.is_authenticated():
             user = request.user
             if user.has_perm('JudgeSystem.change_solution'):
@@ -113,12 +123,17 @@ def probDetail(request, prob_id, contest_id):
             	except:
             		sol_obj = None
             		sol_id = 0
+
+            	blogpost = problem.comments
+            	comments = Comment.objects.filter(blogpost = blogpost)
+
             	context = {
             		'problem' : problem,
             		'user' : request.user,
             		'sol_id' : sol_id,
             		'users' : JudgeUser.objects.all(),
             		'sol_obj' : sol_obj,
+            		'comments' : comments,
             	}
             	return render(request, 'prob_detail.html', context)
             else:
@@ -236,6 +251,8 @@ def addProblem(request, contest_id):
 			sample_input = request.POST["Sinput"]
 			sample_output = request.POST["Soutput"]
 			contest_name = request.POST["contest_name"]
+			blogpost = BlogPost(heading = prob_id, addedby = U, timestamp = timezone.now())
+			blogpost.save()
 
 			contest = Contest.objects.get(pk = contest_name)
 
@@ -247,7 +264,8 @@ def addProblem(request, contest_id):
 							statement = statement, 
 							setter = U, 
 							contest = contest, 
-							sample_input = sample_input, sample_output = sample_output
+							sample_input = sample_input, sample_output = sample_output,
+							comments = blogpost
 						)
 			newProblem.save()
 
@@ -485,6 +503,14 @@ def fbtest(request):
 	}
 	return render(request, 'fbtest.html', context)
 
+def addToPost(blogpost, tags):
+	tags = tags.split()
+	for tag in tags:
+		newTag = Tag(tag = tag)
+		newTag.save()
+		blogpost.tags.add(newTag)
+
+
 def showforum(request):
 	if request.method == 'POST':
 		curUser = request.user
@@ -492,18 +518,31 @@ def showforum(request):
 		cur_time = timezone.now()
 		heading = request.POST["heading"]
 		content = request.POST["content"]
+		tags = request.POST["tags"]
 		blogpost = BlogPost(addedby = curUser, timestamp = cur_time, heading = heading, description = content)
 		blogpost.save()
+		addToPost(blogpost, tags)
+		
 	users = JudgeUser.objects.all();
 	blogposts = BlogPost.objects.all();
 	context = {
 		"users" : users,
 		"blogposts" :  blogposts,
-
+		"" : ,
 	}
 	return render(request, 'forum.html', context)
 
 def showpost(request, post_id):
+	if request.method == 'POST':
+		description = request.POST["content"]
+		user = request.user
+		user = JudgeUser.objects.get(username = user.username)
+		timestamp = timezone.now()
+		blogpost = BlogPost.objects.get(pk = post_id)
+		comment = Comment(description = description, addedby = user, timestamp = timestamp, blogpost = blogpost)
+		comment.save()
+		
+
 	users = JudgeUser.objects.all()
 	blogpost = BlogPost.objects.get(pk = post_id)
 	comments = Comment.objects.filter(blogpost = blogpost)

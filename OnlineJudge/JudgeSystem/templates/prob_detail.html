@@ -70,7 +70,7 @@
         	<ul class="nav navbar-top-links navbar-right">
         		<li class = "dropdown" style = "margin-top:12px;">
                     <ul>
-                    	<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    <li><a href="{% url 'showforum' %}"><i class="fa fa-comments-o fa-fw"></i> Discuss</a>
                         </li>
                         <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
                         </li>       
@@ -101,11 +101,11 @@
 							Sample:
 							<div class = "well well-lg">
 								Input:<br>
-								{{ problem.sample_input |linebreaksbr}}
+								{{ problem.sample_input|linebreaksbr }}
 							</div>
 							<div class = "well well-lg">
 								Output:<br>
-								{{ problem.sample_output |linebreaksbr}}
+								{{ problem.sample_output|linebreaksbr}}
 							</div>
 						</div>
 						<div class = "col-sm-3">
@@ -130,7 +130,39 @@
 							{% endif %}
 						</div>
 					</div>
-					<button type="button" id = "myButton" class = "btn btn-primary btn-lg btn-block" style = "border-radius:100px;">Submit Solution</button>
+					<button type="button" id = "myButton" class = "btn btn-primary btn-lg btn-block" style = "border-radius:100px;">
+						Submit Solution
+					</button>
+					<div class="container-fluid">
+					  <div class="row content">
+
+					      <h4>Leave a Comment:</h4>
+					      <form role="form" method = "post" action = "{% url 'details' problem.contest.contest_id problem.p_id %}">
+					      	{% csrf_token %}
+					        <div class="form-group">
+					          <textarea name = "desc" class="form-control" rows="3" required></textarea>
+					        </div>
+					        <button type="submit" class="btn btn-success">Submit</button>
+					      </form>
+					      <br><br>
+					      
+					      <p><span class="badge">{{ comments|length }}</span> Comments:</p><br>
+					      
+					      <div class="row">
+					        {% for comment in comments %}
+					        <div class="col-sm-2 text-center">
+					          <img src = "{% static 'images/no-user-image.gif'%}" style = "border: 1px solid #39df39;" height="65" width="65" alt="Avatar">
+					        </div>
+					        <div class="col-sm-10">
+					          <h4><a style="text-decoration:none;" href="{% url 'user_profile' comment.addedby.username %}">{{ comment.addedby }} </a><small>{{comment.timestamp}}</small></h4>
+					          <p>{{ comment.description }}</p>
+					          <br>
+					        </div>
+					        {% endfor %}
+					       
+					    </div>
+					  </div>
+				</div>
 					<script>
 					    document.getElementById("myButton").onclick = function(){
 					    	location.href = "/judge/submit/{{problem.id}}"

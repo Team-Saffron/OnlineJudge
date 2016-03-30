@@ -124,7 +124,7 @@
           <ul class="nav navbar-top-links navbar-right">
             <li class = "dropdown" style = "margin-top:12px;">
                     <ul>
-                      <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                      <li><a href="{% url 'showforum' %}"><i class="fa fa-comments-o fa-fw"></i> Discuss</a>
                         </li>
                         <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
                         </li>       
@@ -143,13 +143,27 @@
  
 <div class="container-fluid" style = "margin:1%;margin-top:3%;width:100%;">
        
-        <p><b>All Posts</b><b style = "float:right;">Forum</b><p>
+       <div class = "row">
+        <div class = "col-sm-3">
+          <h2><small>All Posts</small></h2>
+        </div>
+        <div class = "col-sm-9">
+          <a href = "#newThread" style = "color:#111111; text-decoration:none;">
+            <button class ="btn btn-default" style = "float:right; border-radius:50px;">
+            <i class="fa fa-plus fa-fw"></i> 
+            New Thread  
+         </a>
+        </div>
+      </div>
+      <p>
    
       <hr>
       {% for blogpost in blogposts %}
-      <h1><small><a href = "{% url 'showpost' blogpost.id %}"> {{ blogpost.heading }}</a> </small></h2>
-      <h5><span class="glyphicon glyphicon-time"></span> Post by <b> {{ blogpost.addedby }}, {{ blogpost.timestamp }}.</b></h5>
-      <h5><span class="label label-success">Query</span></h5><br>
+      <h1><small><a href = "{% url 'showpost' blogpost.id %}" style="text-decoration:none;"> {{ blogpost.heading }}</a> </small></h2>
+      <h5><span class="glyphicon glyphicon-time"></span> Post by <b> <a style="color:#dd2234;text-decoration:none;" href="{% url 'user_profile' blogpost.addedby.username %}">{{ blogpost.addedby }}</a>, {{ blogpost.timestamp }}.</b></h5>
+      {% for tag in blogpost.tags %}
+      <h5><span class="label label-success">{{tag.tag}}</span></h5><br>
+      {% endfor %}
       <p> {{ blogpost.description }}</p>
       <button class = "btn btn-primary" style= "float:right" onclick = "openPost({{ blogpost.id }})" >Reply</button>
       <br>
@@ -160,14 +174,18 @@
       
       <form role="form" method = "post" action="{% url 'showforum' %}">
           {% csrf_token %}
-        <div class="form-group">
+        <div id = "newThread"class="form-group">
             <label for="usr">Heading:</label>
             <input  name = "heading" type="text" class="form-control" id="usr">
         </div>
           
         <div class="form-group">
+           <label for="tags">Tags:</label>
+          <textarea id = "tags" name = "tags" class="form-control" rows="1"></textarea>
+          <br>
           <label for="txtu">Description:</label>
           <textarea id = "txtu" name = "content" class="form-control" rows="10" required></textarea>
+          
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
       </form>

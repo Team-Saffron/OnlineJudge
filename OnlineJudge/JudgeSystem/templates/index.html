@@ -86,7 +86,7 @@
         	<ul class="nav navbar-top-links navbar-right">
         		<li class = "dropdown" style = "margin-top:12px;">
                     <ul>
-                    	<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    	<li><a href="{% url 'showforum' %}"><i class="fa fa-comments-o fa-fw"></i> Discuss</a>
                         </li>
                         <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
                         </li>       

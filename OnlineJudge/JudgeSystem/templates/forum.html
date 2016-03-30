@@ -158,16 +158,20 @@
       <p>
    
       <hr>
-      {% for blogpost in blogposts %}
-      <h1><small><a href = "{% url 'showpost' blogpost.id %}" style="text-decoration:none;"> {{ blogpost.heading }}</a> </small></h2>
-      <h5><span class="glyphicon glyphicon-time"></span> Post by <b> <a style="color:#dd2234;text-decoration:none;" href="{% url 'user_profile' blogpost.addedby.username %}">{{ blogpost.addedby }}</a>, {{ blogpost.timestamp }}.</b></h5>
-      {% for tag in blogpost.tags %}
-      <h5><span class="label label-success">{{tag.tag}}</span></h5><br>
+      {% for t in tags %}
+      <h1><small><a href = "{% url 'showpost' t.blogpost.id %}" style="text-decoration:none;"> {{ t.blogpost.heading }}</a> </small></h2>
+      <h5><span class="glyphicon glyphicon-time"></span> Post by <b> <a style="color:#dd2234;text-decoration:none;" href="{% url 'user_profile' t.blogpost.addedby.username %}">{{ t.blogpost.addedby }}</a>, {{ t.blogpost.timestamp }}.</b></h5>
+      <h5>
+      {% for tag in t.tags %}
+      <span class="label label-success">{{tag.tag}}</span>
       {% endfor %}
-      <p> {{ blogpost.description }}</p>
+      </h5>
+
+      <p> {{ t.blogpost.description }}</p>
       <button class = "btn btn-primary" style= "float:right" onclick = "openPost({{ blogpost.id }})" >Reply</button>
       <br>
       <hr>
+
       {% endfor %}
       <h4>Open a new thread:</h4>
       

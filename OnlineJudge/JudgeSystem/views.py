@@ -506,6 +506,7 @@ def fbtest(request):
 def addToPost(blogpost, tags):
 	tags = tags.split()
 	for tag in tags:
+		print tag + " "
 		newTag = Tag(tag = tag)
 		newTag.save()
 		blogpost.tags.add(newTag)
@@ -525,10 +526,17 @@ def showforum(request):
 		
 	users = JudgeUser.objects.all();
 	blogposts = BlogPost.objects.all();
+	tags = []
+	for post in blogposts:
+		l = post.tags.all()
+		temp = {
+			'blogpost': post,
+			'tags': l 
+		}
+		tags.append(temp)
 	context = {
 		"users" : users,
-		"blogposts" :  blogposts,
-		"" : ,
+		"tags" : tags, 
 	}
 	return render(request, 'forum.html', context)
 

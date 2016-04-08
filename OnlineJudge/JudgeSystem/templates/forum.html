@@ -73,6 +73,20 @@
         console.log(contest, problem_name);
         location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
       }
+      $(document).ready(function(){  
+        
+        var colors = [
+          "#E43434",
+          "#37B437",
+          "#0080FF",
+          "#FF3399",
+
+        ];
+        var tags = document.getElementsByClassName("blogTag");
+        for (var i = 0; i < tags.length; i++) {
+            tags[i].style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        }
+      });
     </script>
 </head>
   <body style = "background-image : url({% static "images/bg3" %}); background-size: cover;">
@@ -163,12 +177,12 @@
       <h5><span class="glyphicon glyphicon-time"></span> Post by <b> <a style="color:#dd2234;text-decoration:none;" href="{% url 'user_profile' t.blogpost.addedby.username %}">{{ t.blogpost.addedby }}</a>, {{ t.blogpost.timestamp }}.</b></h5>
       <h5>
       {% for tag in t.tags %}
-      <span class="label label-success">{{tag.tag}}</span>
+      <span class="label label-success blogTag">{{tag.tag}}</span>
       {% endfor %}
       </h5>
 
       <p> {{ t.blogpost.description }}</p>
-      <button class = "btn btn-primary" style= "float:right" onclick = "openPost({{ blogpost.id }})" >Reply</button>
+      <button class = "btn btn-primary" style= "float:right" onclick = "openPost({{ t.blogpost.id }})" >Reply</button>
       <br>
       <hr>
 

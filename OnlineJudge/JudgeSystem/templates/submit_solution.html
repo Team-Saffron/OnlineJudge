@@ -3,6 +3,13 @@
 <html lang="en">
 <head>
 	  {% load staticfiles %}
+	  <style type="text/css">
+	  	#editor {
+		    /** Setting height is also important, otherwise editor wont showup**/
+		    font-size: 16px;
+		    height: 300px;
+		}
+	  </style>
 	  <title>Bootstrap Example</title>
 	  <meta charset="utf-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,12 +36,45 @@
 
     <!-- Custom Fonts -->
     <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'ace-builds/src-noconflict/ace.js' %}" type="text/javascript" charset="utf-8"></script>
     <script>
     	function showProblem(contest, problem_name){
     		console.log("HERE\n");
     		console.log(contest, problem_name);
     		location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
     	}
+
+    	$(document).ready(function(){  
+        	
+		      $(function() {
+	  $('textarea[data-editor]').each(function() {
+		    var textarea = $(this);
+		    var mode = textarea.data('editor');
+		    var editDiv = $('<div>', {
+		     id: 'editor',
+		      position: 'absolute',
+		      width: textarea.width(),
+		      'class': textarea.attr('class')
+		    }).insertBefore(textarea);
+		    textarea.css('visibility', 'hidden');
+		    var editor = ace.edit(editDiv[0]);
+		    editor.renderer.setShowGutter(textarea.data('gutter'));
+		    editor.getSession().setValue(textarea.val());
+		    
+		    //editor.getSession().setMode("ace/mode/" + mode);
+		    //editor.setTheme("ace/theme/idle_fingers");
+		    editor.setTheme("ace/theme/lazy");
+		    editor.getSession().setMode("ace/mode/c_cpp");
+		    // copy back to textarea on form submit...
+		    document.getElementById('editor').style.fontSize='16px';
+		    document.getElementById('editor').style.height='500px';
+		    textarea.closest('form').submit(function() {
+		      textarea.val(editor.getSession().getValue());
+		     
+		    })
+		  });
+			});
+      	});
     </script>
 </head>
 	<body style = "background-image : url({% static "images/bg3" %}); background-size: cover;">
@@ -111,8 +151,15 @@
 					<form action = "{% url 'results' problem.id %}" method = "post">
 						<h2><small> Submit Code </small></h2>
 						{% csrf_token %}
-						<textarea  name = "code_text" rows = "25" cols = "100" class = "form-control" placeholder = "Enter Your Code Here" required>
-						</textarea>
+						 
+                <textarea  data-editor="cpp" data-gutter="1" rows ="1" cols = "150%" name="code_text">#include<iostream>
+using namespace std;
+int main()
+{
+	return 0;
+}
+                </textarea>
+            
 						<br>
 						<input class = "btn btn-primary btn-block" type = "Submit" align = "center" >
 					</form>

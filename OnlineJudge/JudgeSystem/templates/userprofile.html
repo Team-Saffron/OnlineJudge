@@ -39,7 +39,7 @@
 			        value: {{user.AC_Count}},
 			        color:"#37B437",
 			        highlight: "#5FFA5E",
-			        label: "ACCEPTED"
+			        label: "Accepted"
 			    },
 			    {
 			        value: {{user.WA_Count}},
@@ -67,8 +67,20 @@
 			    }
 
 			]
+			var options = {
+			  legendTemplate : '<ul>'
+			                  +'<% for (var i=0; i<datasets.length; i++) { %>'
+			                    +'<li>'
+			                    +'<span style=\"background-color:<%=datasets[i].lineColor%>\"></span>'
+			                    +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+			                  +'</li>'
+			                +'<% } %>'
+			              +'</ul>'
+			  }
+
 	    	var ctx = document.getElementById("userchart").getContext("2d");
 			var myDoughnutChart = new Chart(ctx).Doughnut(data);
+			document.getElementById('userChartLegend').innerHTML = myDoughnutChart.generateLegend();
 		});
     </script>
 </head>
@@ -141,7 +153,7 @@
 							<h2>{{user.first_name}} {{user.last_name}}</h2>
 							<h2>{{user.contrib_pts}}</h2>
 						</div>
-						<div class = "col-sm-4" align = "center">
+						<div class = "col-sm-3" align = "center">
 							<h3>
 								Problems Solved:
 								<br>
@@ -158,8 +170,9 @@
 
 						</div>
 						<div class = "col-sm-5">
-							<canvas id="userchart" width="400" height="400"></canvas>
+							<canvas id="userchart" width="400" height="400" style = "float:right;"></canvas>
 						</div>
+						
 					</div>
 				</div>
 			</div>

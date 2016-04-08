@@ -554,9 +554,11 @@ def showpost(request, post_id):
 	users = JudgeUser.objects.all()
 	blogpost = BlogPost.objects.get(pk = post_id)
 	comments = Comment.objects.filter(blogpost = blogpost)
+	tags = blogpost.tags.all()
 	context = {
 		"users" : users,
 		"blogpost" : blogpost,
 		"comments" : comments,
+		"tags" : tags,
 	}
 	return render(request, 'forumpost.html', context)

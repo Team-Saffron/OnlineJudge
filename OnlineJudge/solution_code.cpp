@@ -1,6 +1,7 @@
-class practise{
-    public static void main(String args[]){
-                //write your code here
-        }
+#include<iostream>
+using namespace std;
+int main()
+{
+	return 0;
 }
                 

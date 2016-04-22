@@ -1,4 +1,0 @@
-This is reference Output
-1
-2
-4

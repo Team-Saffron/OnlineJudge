@@ -51,7 +51,6 @@ class Solution(models.Model):
 	penalty = models.IntegerField(default = 0)
 	solved = models.BooleanField(default = 0)
 	submission_time = models.DateTimeField()
-	id  = models.IntegerField(primary_key = True)
 	verdict = models.CharField(max_length = 100)
 
 	def __str__(self):

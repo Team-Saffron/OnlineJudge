@@ -23,7 +23,7 @@ class Problem(models.Model):
 	name = models.CharField(max_length = 100)
 	p_id = models.CharField(max_length = 10)
 
-	statement = models.CharField(max_length = 2000)
+	statement = models.CharField(max_length = 4000)
 	setter = models.ForeignKey(JudgeUser, null = True, related_name = 'SetterOfProblem')
 	contest = models.ForeignKey('Contest', null = True, related_name = 'ContestOfProblem')
 	sample_input = models.CharField(max_length = 200, null = True)

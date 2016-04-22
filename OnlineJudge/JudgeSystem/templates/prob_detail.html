@@ -91,23 +91,10 @@
 				</div>
 				<div class = "panel-body">
 					<div class = "row">
-						<div class = "col-sm-12">
+						<div class = "col-sm-9">
 							{{problem.statement|safe|linebreaksbr}}
 						</div>
-					</div>
-					<br>
-					<div class = "row">
-						<div class = "col-sm-9">
-							Sample:
-							<div class = "well well-lg">
-								Input:<br>
-								{{ problem.sample_input|linebreaksbr }}
-							</div>
-							<div class = "well well-lg">
-								Output:<br>
-								{{ problem.sample_output|linebreaksbr}}
-							</div>
-						</div>
+					
 						<div class = "col-sm-3">
 							{% if user.is_authenticated %}
 								<div class = "panel-red" style = "border: 1px solid #d94f4f; margin-bottom: 12px;">

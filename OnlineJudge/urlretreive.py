@@ -39,9 +39,10 @@ i = 0;
 conn.cursor().execute("DELETE FROM JudgeSystem_solution")
 conn.cursor().execute("DELETE FROM JudgeSystem_problem")
 conn.cursor().execute("ALTER TABLE JudgeSystem_problem AUTO_INCREMENT = 1")
+
 #conn.cursor().execute("DELETE FROM JudgeSystem_blogpost")
 conn.cursor().execute("ALTER TABLE JudgeSystem_solution AUTO_INCREMENT=1")
-#conn.cursor().execute("ALTER TABLE JudgeSystem_blogpost AUTO_INCREMENT=1")
+conn.cursor().execute("ALTER TABLE JudgeSystem_blogpost AUTO_INCREMENT=1")
 Bid = 0
 for problem in allProbLinks:
 	response = urllib2.urlopen(problem)
@@ -50,10 +51,10 @@ for problem in allProbLinks:
 	problem_id = problem[29:] 
 	problem_name = soup.find('h2', {"id": "problem-name"}).string
 	desc = soup.find('div', {"id": "problem-body"})
-	desc = desc.contents
+	
 	# id of problem and blogpost
 	
-	problem_desc = str(desc[1])
+	problem_desc = str(desc)
 	preTag = soup.find_all('pre')
 	if len(preTag) == 1:
 		preTag = preTag[len(preTag)-1]
@@ -74,11 +75,11 @@ for problem in allProbLinks:
 		
 		with conn.cursor() as cursor:
 			Bid = Bid + 1
-			query = "INSERT INTO JudgeSystem_problem (name, p_id, statement, sample_input, sample_output, contest_id, setter_id, comments_id) VALUES (%s, %s, %s, %s, %s, 'Practice', 1, %s)" 
+			query = "INSERT INTO JudgeSystem_problem (name, p_id, statement, contest_id, setter_id, comments_id) VALUES (%s, %s, %s, 'Practice', 1, %s)" 
 			blogPostQuery = "INSERT INTO JudgeSystem_blogpost (heading, addedby_id, timestamp) VALUES (%s, 1, NOW())" 
 			cursor.execute(blogPostQuery, (problem_name))
 			print Bid
-			cursor.execute(query, (problem_name, problem_id, problem_desc, input, output, (Bid)))
+			cursor.execute(query, (problem_name, problem_id, problem_desc, (Bid)))
 			createIO(Bid, input, output)
 
 

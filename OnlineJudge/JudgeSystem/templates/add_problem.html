@@ -1,46 +1,174 @@
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	  {% load staticfiles %}
 	  <title>Bootstrap Example</title>
 	  <meta charset="utf-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
 	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<body>
-		Hey! {{user.first_name}}
-		You can add Problem here
-		<form action = "{% url 'add_problem' contest_name %}" method = "post">
-			{% csrf_token %}
-			Contest :
-			<input type = "text" value = "{{contest_name}}" name = "contest_name" readonly>
-			<br>
-			Problem ID : 
-			<input type = "text" name = "prob_id">
-			<br>
-			Problem Name : 
-			<input type = "text" name = "prob_name">
-			<br>
-			Statement : <br>
-			<textarea name = "statement" rows = 20 cols = 20>ADD statement</textarea>
-			<br>
-			Add Reference Input:
-			<br>
-			<textarea name = "input" rows = 20 cols = 20>ADD input</textarea>
-			<br>
-			Add Expected Output:
-			<br>
-			<textarea name = "output" rows = 20 cols = 20>ADD output</textarea>
-			<br>
-			Add Sample Input:
-			<br>
-			<textarea name = "Sinput" rows = 20 cols = 20>ADD input</textarea>
-			Add Sample Output:
-			<br>
-			<textarea name = "Soutput" rows = 20 cols = 20>ADD input</textarea>
-			<input type = "submit">
+	  <link href="{% static "dist/css/sb.css" %}" rel="stylesheet">
+	 <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+	 <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
 
-		</form>
+		<!-- Bootstrap Core CSS -->
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
+    <!-- MetisMenu CSS -->
+    <link href= "{% static 'bower_components/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href= "{% static 'dist/css/timeline.css' %}"rel="stylesheet">
+
+   
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'bower_components/morrisjs/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <script>
+    	function showProblem(contest, problem_name){
+    		console.log("HERE\n");
+    		console.log(contest, problem_name);
+    		location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
+    	}
+    </script>
+</head>
+	<body style = "background-image : url({% static "images/bg3" %}); background-size: cover;">
+		<nav class="navbar navbar-default navbar-static-top" style = "backgroud-color:red;" style="margin-bottom: 0">
+		  
+		    <div class="navbar-header">
+		    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+		      <a class="navbar-brand" href="{% url 'index' %}" style = "font-family: 'Muli', sans-serif;"><i><b> Deltech </b> Online Judge</i></a>
+		    </div>
+	     
+	
+		     	<div class="navbar-default sidebar" role="navigation">
+
+	                <div class="sidebar-nav navbar-collapse">
+	                	<ul class="nav" id="side-menu">
+	                		
+	                		<li>
+	                			<a href = "{% url 'add_problem' "Practice" %}" class = ""><i class="fa fa-plus fa-fw"></i> Add Problem</a>
+	                		</li>
+	                		<li>
+	                			 <a href = "{% url 'create_contest' %}"><i class="fa fa-pencil fa-fw"></i> Create your own contest</a>
+	                		</li>
+	                		<li>
+	                			<a href = "{% url 'userlist' %}"  ><i class="fa fa-users fa-fw"></i> All Users
+	                			</a> 
+	                		</li>
+	                		<li >
+	                			<a data-toggle = "collapse" data-target="#demo"><i class="fa fa-users fa-fw"></i> Top Users <span class="fa arrow"></span></a>
+	                			<ul class="nav nav-second-level collapse" id = "demo">
+	                				{% for u in users %}
+	                				<li>
+	                					<a href = "{% url 'user_profile' u.username %}">{{u.first_name}}</a>
+	                				</li>
+	                				{% endfor %}
+	                			</ul>
+	                		</li>
+	                		<li>
+	                			<a href = "{% url 'AllContests' %}"><i class="fa fa-list fa-fw"></i> All Contests </a>
+	                		</li>
+	                	</ul>
+	                </div>
+	            </div>
+        	
+        	<ul class="nav navbar-top-links navbar-right">
+        		<li class = "dropdown" style = "margin-top:12px;">
+                    <ul>
+                    	<li><a href="{% url 'showforum' %}"><i class="fa fa-comments-o fa-fw"></i> Discuss</a>
+                        </li>
+                        <li><a href="{% url 'user_profile' user.username %}"><i class="fa fa-user fa-fw"></i>{{user.first_name}} {{user.last_name}}</a>
+                        </li>       
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+          
+	    </nav>
+
+	        <div id = "page-wrapper">
+				<h2> Hey! {{user.first_name}} </h2>
+				<div class = "panel panel-default">
+					<div class = "panel-heading">
+						Problem Details:
+					</div>
+					<div class = "panel-body">
+						
+							<form action = "{% url 'add_problem' contest_name %}" method = "post">
+								{% csrf_token %}
+								<div class = "form-group">
+									<label> Contest : </label>
+									<input class = "form-control" type = "text" value = "{{contest_name}}" name = "contest_name" readonly>
+								</div>
+								<div class = "form-group">
+									<label>
+										Problem ID :
+									</label>
+									<input class = "form-control" type = "text" name = "prob_id">
+								</label>
+								</div>
+								<div class = "form-group">
+									<label>
+										Problem Name : 
+									</label>
+								<input class = "form-control" type = "text" name = "prob_name">
+								</div>
+								
+								<div class = "form-group">
+									<label>
+										Statement : 
+									</label>
+								<textarea class="form-control" name = "statement" rows = 20 cols = 20>ADD statement</textarea>
+								</div>
+								
+								<div class = "form-group">
+									<label>
+										Add Reference Input:
+									</label>
+								<textarea class="form-control" name = "input" rows = 20 cols = 20>ADD input</textarea>
+								</div>
+								
+								<div class = "form-group">
+									<label>
+										Add Expected Output:
+									</label>
+								<textarea class="form-control" name = "output" rows = 20 cols = 20>ADD output</textarea>
+								</div>
+								
+								<div class = "form-group">
+									<label>
+										Add Sample Input:
+									</label>
+								<textarea class="form-control" name = "Sinput" rows = 20 cols = 20>ADD input</textarea>
+								</div>
+								
+								<div class = "form-group">
+									<label>
+										Add Sample Output:
+									</label>
+								<textarea class="form-control" name = "Soutput" rows = 20 cols = 20 placeholder="Add Output"></textarea>
+								
+								</div>
+								<input class="btn btn-primary btn-lg" type = "submit">
+							</form>
+					</div>
+				</div>
+		    </div>
 	</body>
 </head>
 </html>

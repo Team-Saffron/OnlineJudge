@@ -38,4 +38,6 @@ urlpatterns = [
     url(r'^fbtest/', views.fbtest, name = 'fbtest'),
     url(r'^forum/', views.showforum, name = 'showforum'),
     url(r'^posts/(?P<post_id>[0-9]+)/', views.showpost, name = 'showpost'),
+    url(r'^print/', views.printView, name = 'pr_view'),
+
 ]

@@ -106,11 +106,45 @@
       </nav>
 
           <div id = "page-wrapper">
-            
-            <div id="editor">{% if sol_obj == None %}<strong> You have not submitted a solution yet.</strong>
-              {% else %}{{sol_obj.code }}
-              {% endif %}
+          <div class = "panel panel-primary">
+            <div class="panel-heading">
+             You submitted for problem {{problem.name}}
             </div>
+            <div class="panel-body">  
+            <div class="row">    
+              <div class="col-sm-7">      
+                <div id="editor">
+
+{% if sol_obj == None %}<strong> You have not submitted a solution yet.</strong>
+                  {% else %}{{sol_obj.code }}
+                  {% endif %}
+                </div>
+            </div>
+
+              <div class="col-sm-4">
+                <div class="panel panel-success" id="verdict-panel">
+                  <div class="panel-heading">
+                    Verdict:
+                  </div>
+                  <div class="panel-body">
+                    <strong>
+                    At time: {{sol_obj.submission_time}}
+              <br>
+                Result: 
+                <p id="result" style="color:green;">
+                  {{sol_obj.verdict}}
+                </p>
+              <br>
+              Your penalties : {{sol_obj.penalty}}
+            </strong>
+          </div>
+        </div>
+
+              </div>
+          </div>
+          </div>
+          </div>
+
           
         </div>
 
@@ -119,12 +153,16 @@
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/lazy");
     editor.getSession().setMode("ace/mode/c_cpp");
-    document.getElementById('editor').style.height='800px';
-    document.getElementById('editor').style.width='1000px';
+    document.getElementById('editor').style.height='400px';
+    document.getElementById('editor').style.width='600px';
     document.getElementById('editor').style.fontSize='18px';
     document.getElementById('editor').readOnly = true;
+    if("{{sol_obj.verdict}}" != "Success")
+    {
+      document.getElementById("verdict-panel").className = "panel panel-danger";
+      document.getElementById("result").style.color = "RED";
+  }
 </script>
-     </body>
-     
-  </head>
+    
+  </body>
 </html>

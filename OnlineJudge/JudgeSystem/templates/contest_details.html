@@ -29,6 +29,11 @@
     <!-- Custom Fonts -->
     <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
      <script>
+     	function showProblem(contest, problem_name){
+    		console.log("HERE\n");
+    		console.log(contest, problem_name);
+    		location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
+    	}
 	  	function findDiff()
 	  	{
 	  		var cur = new Date();
@@ -64,7 +69,7 @@
 	  		// Checking Days Left 
 	  		var daysLeft = {{ contest.end_time.day }} - cur.getDate() + carry;
 
-	  		return daysLeft + " Days, " + hrLeft + " Hours, " + minLeft + " Minutes, " + secLeft; 
+	  		return daysLeft + " Days, " + hrLeft + " Hours, " + minLeft + " Minutes, " + secLeft + " Seconds"; 
 	  	}
 	  	function setTimer(){
 	  		var timeleft = findDiff();
@@ -139,54 +144,99 @@
 
 	        <div id = "page-wrapper">
 				{% if is_admin == True %}
-				<h3> Hello! Admin
-					<br>
-					You can add problems for this contest here:
-					<a href = "{% url 'add_problem' contest.contest_id %}">Add Problem</a>
-					<br>
-					<a href= "{% url 'extend_contest' contest.contest_id %}"> Extend Contest </a>
-					<br>
-					{% endif %}
-
-					<a href = "{% url 'ranklist' contest.contest_id %}"> Current Ranklist </a>
-					<br>
-					<br>
-
-				</h3>
-				<h2> 
-				<h3>Register:</h3>
-				<button type="button" id = "myButton">Register</button>
-						<script>
-						    document.getElementById("myButton").onclick = function(){
-						    	location.href = "/judge/contests/{{contest.contest_id}}/register"
-						    };
-						</script>
+				<div class="panel panel-primary">
+					<div class="panel-body">
+						<h3> Hello! Admin
+							<br>
+							<br>
+							You can add problems for this contest here:
+							<br>
+							<br>
+							<div class="btn btn-primary">
+								<a href = "{% url 'add_problem' contest.contest_id %}" style="color:#FFFFFF;">Add Problem</a>
+							</div>
+							<div class="btn btn-primary" style="float:right;">
+								<a href= "{% url 'extend_contest' contest.contest_id %}"  style="color:#FFFFFF;"> Extend Contest </a>
+							</div>
+							{% endif %}
+						</h3>
+					</div>
+				</div>
 				<h2> Problem List: </h2>
-					{% for p in problem_list%}
-					 <li>
-					   	<a href = "{% url 'details' p.contest.contest_id p.p_id  %}">{{p.contest}}/{{p.name}}</a>
-					</li>
-					{% endfor %}
-				<h2> Registered Users </h2>
-				{% for user in user_list%}
-				 <li>
-				   	<a href = "{% url 'user_profile' user.username %}">{{user.username}}</a>
-				</li>
-				{% endfor %}
-				<br>
-				<h4>
-					Start Time : {{ contest.start_time }}
-					<br>
-					End Time : {{ contest.end_time }}
-					<br>
-					Current Time : {{ cur_time }}
-					<br>
-					Total Time : {{ tot_time }}
-					<br>
-				</h4>
+				<div class="row">
+					<div class="col-sm-7">
+						
+						{% for p in problem_list %}  
+						   <div class = "panel panel-info">
+						   		<div class = "panel-body" style = "font-size:16px; font-weight:bold;">
+						   			<div class = "row">
+						   				<div class = "col-sm-5">
+								   			<a href = "{% url 'details' p.contest.contest_id p.p_id  %}" style = "color: #009933">
+								   				{{p.name}}
+								   			</a>
+								   		</div>
+								   		
+								   		<div class = "col-sm-7">
+								   			<div class = "btn btn-success" style = "float:right; background-color : #009933;"
+								   			 onclick = "showProblem('{{p.contest.contest_id}}', '{{p.p_id}}')">
+								   				 Solve Challenge
+								   			</div>
+								   		</div>
+								   	</div>
+								</div>
 
-				<h4 id = "timer">
-				</h4>
+						   </div>
+						{% endfor %}
+
+					</div>
+					<div class="col-sm-5">
+						<div class="panel panel-info">
+							<div class="panel-body">
+								<h3>
+									<a href = "{% url 'ranklist' contest.contest_id %}"> Current Ranklist </a>
+									<br>
+									<br>
+
+								</h3>
+									
+								<h2> 
+								<h3>Register:</h3>
+								<button type="button" id = "myButton" class="btn btn-info">Register</button>
+										<script>
+										    document.getElementById("myButton").onclick = function(){
+										    	location.href = "/judge/contests/{{contest.contest_id}}/register"
+										    };
+										</script>
+								<br>
+								<h4>
+									Start Time : {{ contest.start_time }}
+									<br>
+									End Time : {{ contest.end_time }}
+									<br>
+									Current Time : {{ cur_time }}
+									<br>
+									Total Time : {{ tot_time }}
+									<br>
+								</h4>
+
+
+								<h4 id = "timer">
+								</h4>
+							</div>
+						</div>
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								Registered user:
+							</div>
+							<div class="panel-body">
+								<ul>
+								{% for u in user_list %}
+									<li> <a href = "{% url 'user_profile' u.username %}" style="font-size: 24px;">{{u.username}}</a> </li>
+								{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
 				
 
 			</div>

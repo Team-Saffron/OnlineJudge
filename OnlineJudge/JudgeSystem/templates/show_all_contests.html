@@ -30,11 +30,50 @@
     <!-- Custom Fonts -->
     <link href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <script>
-    	function showProblem(contest, problem_name){
-    		console.log("HERE\n");
-    		console.log(contest, problem_name);
-    		location.href = "/judge/problems/" + contest + "/" + problem_name + "/";
-    	}
+    
+	  	function findDiff()
+	  	{
+	  		var cur = new Date();
+	  		var carry = 0;
+	  		
+	  		// Checking Seconds Left
+	  		var secLeft = {{ contest.end_time.second }} - cur.getSeconds();
+	  		if(secLeft < 0){
+	  			secLeft = secLeft + 60;
+	  			carry = -1;
+	  		}
+
+	  		// Checking Minutes Left
+	  		var minLeft = ({{ contest.end_time.minute }} - cur.getMinutes() + carry + 30) % 60;
+	  		if(minLeft < 0){
+	  			minLeft = minLeft + 60;
+	  			carry = -1;
+	  		}
+	  		else{
+	  			carry = 0;
+	  		}
+
+	  		// Checking Hours Left
+	  		var hrLeft = {{ contest.end_time.hour }} - cur.getHours() + carry + 5;
+	  		if(hrLeft < 0){
+	  			hrLeft = hrLeft + 24;
+	  			carry = -1;
+	  		}
+	  		else{
+	  			carry = 0;
+	  		}
+
+	  		// Checking Days Left 
+	  		var daysLeft = {{ contest.end_time.day }} - cur.getDate() + carry;
+
+	  		return daysLeft + " Days, " + hrLeft + " Hours, " + minLeft + " Minutes, " + secLeft; 
+	  	}
+	  	function setTimer(){
+	  		var timeleft = findDiff();
+	  		document.getElementById("timeLeft").innerHTML =  timeleft;
+	  		setTimeout(setTimer, 500);
+	  	}
+ 
     </script>
 </head>
 	<body style = "background-image : url({% static "images/bg3" %}); background-size: cover;">
@@ -102,12 +141,55 @@
 	    </nav>
 
 	        <div id = "page-wrapper">
+				
+	        	
 				<h1> All Contests in DataBase </h1>
+				<h4>
+				<div class="row">
+							<strong>
+								<div class="col-sm-3">
+									
+								</div>
+								<div class="col-sm-3"></div>
+								<div class="col-sm-3">
+									<p style="color: #009916;">Start Time</p>
+								</div>
+								<div class="col-sm-3">
+									<p style="color: #FF3636;">End time</p>
+								</div>
+								
+							</strong>
+				</div>
+				</h4>
 				{% for contest in contests %}
-				<li>
-					<a href = "{% url 'ContestDetails' contest.contest_id %}">{{contest.contest_id}}</a>
-				</li>
+				
+				<div class="panel panel-info">
+					<h4>
+					<div class="panel-body">
+						<div class="row">
+							<strong>
+								<div class="col-sm-3">
+									<a href = "{% url 'ContestDetails' contest.contest_id %}">{{contest.contest_id}}</a>
+								</div>
+								<div class="col-sm-3"></div>
+								<div class="col-sm-3">
+									<p style="color: #667676;">{{contest.start_time}}</p>
+								</div>
+								<div class="col-sm-3">
+									<p style="color: #667676;">{{contest.end_time}}</p>
+								</div>
+								
+							</strong>
+						</div>
+					</div>
+						
+					</h4>
+				</div>
+			
 				{% endfor %}
 			</div>
 	</body>
+	<script type="text/javascript">
+		setTimer();
+	</script>
 	</html>

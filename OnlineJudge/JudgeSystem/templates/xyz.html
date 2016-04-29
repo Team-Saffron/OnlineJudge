@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,35 +103,14 @@
 	    </nav>
 
 	        <div id = "page-wrapper">
-				Hey! {{user.first_name}}
-				You can add Contest here
-				<form action = "{% url 'create_contest' %}" method = "post">
-					{% csrf_token %}
-					
-					<div class = "form-group">
-						<label>
-							Contest Id
-						</label>
-						<input  class="form-control" type="text" name = "contest_id" >
-					</div>
-					<div class="form-group">
-						<label>
-							Start Time: (Eg : Aug 28 1999 12:00AM)
-						</label>
-						<input class="form-control" type="text" name = "start_time">
-					</div>
-					<div class="form-group">
-						<label>
-							End Time:
-						</label>
-						<input class="form-control" type="text" name = "end_time">
-					</div>
-						
-						<input type = "submit">
+	        	{{message}}
 
-				</form>
-			</div>
-
-	</body>
-</head>
+{% for problem in problems %}
+<div class ="well">
+{{ problem.name }}
+<br>
+</div>
+{% endfor %}
+</div>
+</body>
 </html>

@@ -562,3 +562,13 @@ def showpost(request, post_id):
 		"tags" : tags,
 	}
 	return render(request, 'forumpost.html', context)
+
+
+def printView(request):
+	problems = Problem.objects.all()
+	context = {
+		"message" : "This is test",
+		"problems" : problems
+	}
+	return render(request, 'xyz.html', context)
+

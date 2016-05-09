@@ -12,7 +12,8 @@ from django.utils import timezone
 
 
 # Create your views here.
-
+def defaultPage(request):
+	return render(request,'login_page.html',{})
 def loginPage(request):
 
 	context = {

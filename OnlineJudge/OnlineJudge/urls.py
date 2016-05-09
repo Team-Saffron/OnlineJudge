@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
+from JudgeSystem import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^judge/', include('JudgeSystem.urls'))
+    url(r'^judge/', include('JudgeSystem.urls')),
+    url(r'^', views.defaultPage, name = 'pr_view'),
 ]
